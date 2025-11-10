@@ -9,117 +9,135 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as WelcomeRouteImport } from './routes/welcome'
-import { Route as LoginSuccessRouteImport } from './routes/login-success'
-import { Route as LoginFailureRouteImport } from './routes/login-failure'
-import { Route as LoginRouteImport } from './routes/login'
+import { Route as PublicRouteImport } from './routes/_public'
 import { Route as AuthRouteImport } from './routes/_auth'
-import { Route as AuthMyRouteImport } from './routes/_auth/my'
+import { Route as IndexRouteImport } from './routes/index'
+import { Route as PublicLoginSuccessRouteImport } from './routes/_public/login-success'
+import { Route as PublicLoginFailureRouteImport } from './routes/_public/login-failure'
+import { Route as PublicWelcomeIndexRouteImport } from './routes/_public/welcome/index'
+import { Route as PublicLoginIndexRouteImport } from './routes/_public/login/index'
+import { Route as AuthRecordIndexRouteImport } from './routes/_auth/record/index'
+import { Route as AuthMyIndexRouteImport } from './routes/_auth/my/index'
 
-const WelcomeRoute = WelcomeRouteImport.update({
-  id: '/welcome',
-  path: '/welcome',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const LoginSuccessRoute = LoginSuccessRouteImport.update({
-  id: '/login-success',
-  path: '/login-success',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const LoginFailureRoute = LoginFailureRouteImport.update({
-  id: '/login-failure',
-  path: '/login-failure',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const LoginRoute = LoginRouteImport.update({
-  id: '/login',
-  path: '/login',
+const PublicRoute = PublicRouteImport.update({
+  id: '/_public',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthRoute = AuthRouteImport.update({
   id: '/_auth',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AuthMyRoute = AuthMyRouteImport.update({
-  id: '/my',
-  path: '/my',
+const IndexRoute = IndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PublicLoginSuccessRoute = PublicLoginSuccessRouteImport.update({
+  id: '/login-success',
+  path: '/login-success',
+  getParentRoute: () => PublicRoute,
+} as any)
+const PublicLoginFailureRoute = PublicLoginFailureRouteImport.update({
+  id: '/login-failure',
+  path: '/login-failure',
+  getParentRoute: () => PublicRoute,
+} as any)
+const PublicWelcomeIndexRoute = PublicWelcomeIndexRouteImport.update({
+  id: '/welcome/',
+  path: '/welcome/',
+  getParentRoute: () => PublicRoute,
+} as any)
+const PublicLoginIndexRoute = PublicLoginIndexRouteImport.update({
+  id: '/login/',
+  path: '/login/',
+  getParentRoute: () => PublicRoute,
+} as any)
+const AuthRecordIndexRoute = AuthRecordIndexRouteImport.update({
+  id: '/record/',
+  path: '/record/',
+  getParentRoute: () => AuthRoute,
+} as any)
+const AuthMyIndexRoute = AuthMyIndexRouteImport.update({
+  id: '/my/',
+  path: '/my/',
   getParentRoute: () => AuthRoute,
 } as any)
 
 export interface FileRoutesByFullPath {
-  '/login': typeof LoginRoute
-  '/login-failure': typeof LoginFailureRoute
-  '/login-success': typeof LoginSuccessRoute
-  '/welcome': typeof WelcomeRoute
-  '/my': typeof AuthMyRoute
+  '/': typeof IndexRoute
+  '/login-failure': typeof PublicLoginFailureRoute
+  '/login-success': typeof PublicLoginSuccessRoute
+  '/my': typeof AuthMyIndexRoute
+  '/record': typeof AuthRecordIndexRoute
+  '/login': typeof PublicLoginIndexRoute
+  '/welcome': typeof PublicWelcomeIndexRoute
 }
 export interface FileRoutesByTo {
-  '/login': typeof LoginRoute
-  '/login-failure': typeof LoginFailureRoute
-  '/login-success': typeof LoginSuccessRoute
-  '/welcome': typeof WelcomeRoute
-  '/my': typeof AuthMyRoute
+  '/': typeof IndexRoute
+  '/login-failure': typeof PublicLoginFailureRoute
+  '/login-success': typeof PublicLoginSuccessRoute
+  '/my': typeof AuthMyIndexRoute
+  '/record': typeof AuthRecordIndexRoute
+  '/login': typeof PublicLoginIndexRoute
+  '/welcome': typeof PublicWelcomeIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
+  '/': typeof IndexRoute
   '/_auth': typeof AuthRouteWithChildren
-  '/login': typeof LoginRoute
-  '/login-failure': typeof LoginFailureRoute
-  '/login-success': typeof LoginSuccessRoute
-  '/welcome': typeof WelcomeRoute
-  '/_auth/my': typeof AuthMyRoute
+  '/_public': typeof PublicRouteWithChildren
+  '/_public/login-failure': typeof PublicLoginFailureRoute
+  '/_public/login-success': typeof PublicLoginSuccessRoute
+  '/_auth/my/': typeof AuthMyIndexRoute
+  '/_auth/record/': typeof AuthRecordIndexRoute
+  '/_public/login/': typeof PublicLoginIndexRoute
+  '/_public/welcome/': typeof PublicWelcomeIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/login' | '/login-failure' | '/login-success' | '/welcome' | '/my'
-  fileRoutesByTo: FileRoutesByTo
-  to: '/login' | '/login-failure' | '/login-success' | '/welcome' | '/my'
-  id:
-    | '__root__'
-    | '/_auth'
-    | '/login'
+  fullPaths:
+    | '/'
     | '/login-failure'
     | '/login-success'
+    | '/my'
+    | '/record'
+    | '/login'
     | '/welcome'
-    | '/_auth/my'
+  fileRoutesByTo: FileRoutesByTo
+  to:
+    | '/'
+    | '/login-failure'
+    | '/login-success'
+    | '/my'
+    | '/record'
+    | '/login'
+    | '/welcome'
+  id:
+    | '__root__'
+    | '/'
+    | '/_auth'
+    | '/_public'
+    | '/_public/login-failure'
+    | '/_public/login-success'
+    | '/_auth/my/'
+    | '/_auth/record/'
+    | '/_public/login/'
+    | '/_public/welcome/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
+  IndexRoute: typeof IndexRoute
   AuthRoute: typeof AuthRouteWithChildren
-  LoginRoute: typeof LoginRoute
-  LoginFailureRoute: typeof LoginFailureRoute
-  LoginSuccessRoute: typeof LoginSuccessRoute
-  WelcomeRoute: typeof WelcomeRoute
+  PublicRoute: typeof PublicRouteWithChildren
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/welcome': {
-      id: '/welcome'
-      path: '/welcome'
-      fullPath: '/welcome'
-      preLoaderRoute: typeof WelcomeRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/login-success': {
-      id: '/login-success'
-      path: '/login-success'
-      fullPath: '/login-success'
-      preLoaderRoute: typeof LoginSuccessRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/login-failure': {
-      id: '/login-failure'
-      path: '/login-failure'
-      fullPath: '/login-failure'
-      preLoaderRoute: typeof LoginFailureRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/login': {
-      id: '/login'
-      path: '/login'
-      fullPath: '/login'
-      preLoaderRoute: typeof LoginRouteImport
+    '/_public': {
+      id: '/_public'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof PublicRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_auth': {
@@ -129,32 +147,91 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/_auth/my': {
-      id: '/_auth/my'
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_public/login-success': {
+      id: '/_public/login-success'
+      path: '/login-success'
+      fullPath: '/login-success'
+      preLoaderRoute: typeof PublicLoginSuccessRouteImport
+      parentRoute: typeof PublicRoute
+    }
+    '/_public/login-failure': {
+      id: '/_public/login-failure'
+      path: '/login-failure'
+      fullPath: '/login-failure'
+      preLoaderRoute: typeof PublicLoginFailureRouteImport
+      parentRoute: typeof PublicRoute
+    }
+    '/_public/welcome/': {
+      id: '/_public/welcome/'
+      path: '/welcome'
+      fullPath: '/welcome'
+      preLoaderRoute: typeof PublicWelcomeIndexRouteImport
+      parentRoute: typeof PublicRoute
+    }
+    '/_public/login/': {
+      id: '/_public/login/'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof PublicLoginIndexRouteImport
+      parentRoute: typeof PublicRoute
+    }
+    '/_auth/record/': {
+      id: '/_auth/record/'
+      path: '/record'
+      fullPath: '/record'
+      preLoaderRoute: typeof AuthRecordIndexRouteImport
+      parentRoute: typeof AuthRoute
+    }
+    '/_auth/my/': {
+      id: '/_auth/my/'
       path: '/my'
       fullPath: '/my'
-      preLoaderRoute: typeof AuthMyRouteImport
+      preLoaderRoute: typeof AuthMyIndexRouteImport
       parentRoute: typeof AuthRoute
     }
   }
 }
 
 interface AuthRouteChildren {
-  AuthMyRoute: typeof AuthMyRoute
+  AuthMyIndexRoute: typeof AuthMyIndexRoute
+  AuthRecordIndexRoute: typeof AuthRecordIndexRoute
 }
 
 const AuthRouteChildren: AuthRouteChildren = {
-  AuthMyRoute: AuthMyRoute,
+  AuthMyIndexRoute: AuthMyIndexRoute,
+  AuthRecordIndexRoute: AuthRecordIndexRoute,
 }
 
 const AuthRouteWithChildren = AuthRoute._addFileChildren(AuthRouteChildren)
 
+interface PublicRouteChildren {
+  PublicLoginFailureRoute: typeof PublicLoginFailureRoute
+  PublicLoginSuccessRoute: typeof PublicLoginSuccessRoute
+  PublicLoginIndexRoute: typeof PublicLoginIndexRoute
+  PublicWelcomeIndexRoute: typeof PublicWelcomeIndexRoute
+}
+
+const PublicRouteChildren: PublicRouteChildren = {
+  PublicLoginFailureRoute: PublicLoginFailureRoute,
+  PublicLoginSuccessRoute: PublicLoginSuccessRoute,
+  PublicLoginIndexRoute: PublicLoginIndexRoute,
+  PublicWelcomeIndexRoute: PublicWelcomeIndexRoute,
+}
+
+const PublicRouteWithChildren =
+  PublicRoute._addFileChildren(PublicRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
+  IndexRoute: IndexRoute,
   AuthRoute: AuthRouteWithChildren,
-  LoginRoute: LoginRoute,
-  LoginFailureRoute: LoginFailureRoute,
-  LoginSuccessRoute: LoginSuccessRoute,
-  WelcomeRoute: WelcomeRoute,
+  PublicRoute: PublicRouteWithChildren,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
