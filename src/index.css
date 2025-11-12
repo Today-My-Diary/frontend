@@ -1,2 +1,138 @@
 @import "tailwindcss";
 @import "tw-animate-css";
+
+@theme inline {
+  --color-primary: var(--primary);
+  --color-primary-semilight: var(--primary-semilight);
+  --color-primary-light: var(--primary-light);
+  --color-secondary: var(--secondary);
+  --color-secondary-semilight: var(--secondary-semilight);
+  --color-secondary-light: var(--secondary-light);
+  --color-background-white: var(--background-white);
+  --color-background-primary: var(--background-primary);
+  --color-background-success: var(--background-success);
+  --color-success: var(--success);
+  --color-gradient-primary-start: #ffb88c;
+  --color-gradient-primary-end: #ff9a6c;
+
+  --animate-fairy-float: fairy-float 3s ease-in-out infinite;
+  --animate-fairy-wing: fairy-wing 1.5s ease-in-out infinite;
+  --animate-fairy-wand: fairy-wand 2s ease-in-out infinite;
+  --animate-fairy-sparkle-float: fairy-sparkle-float 2.5s ease-in-out infinite
+    0.3s;
+  --animate-move-right: move-right 10s linear forwards;
+
+  @keyframes fairy-float {
+    0%,
+    100% {
+      transform: translateY(0) rotate(-2deg);
+    }
+    50% {
+      transform: translateY(-8px) rotate(2deg);
+    }
+  }
+
+  @keyframes fairy-wing {
+    0%,
+    100% {
+      transform: scaleX(1);
+    }
+    50% {
+      transform: scaleX(1.15);
+    }
+  }
+
+  @keyframes fairy-wand {
+    0%,
+    100% {
+      transform: rotate(-8deg);
+    }
+    50% {
+      transform: rotate(8deg);
+    }
+  }
+
+  @keyframes fairy-sparkle-float {
+    0% {
+      transform: translateY(0) scale(0);
+    }
+    50% {
+      transform: translateY(-5px) scale(1);
+    }
+    100% {
+      transform: translateY(-10px) scale(0);
+    }
+  }
+
+  @keyframes move-right {
+    from {
+      transform: translateX(-5%);
+    }
+    to {
+      transform: translateX(calc(100vw - 95%));
+    }
+  }
+}
+
+:root {
+  --primary: #ffb47f;
+  --primary-semilight: #fedcc1;
+  --primary-light: #feeddd;
+  --secondary: #6f5f56;
+  --secondary-semilight: #a79990;
+  --secondary-light: #f1e6d6;
+  --background-white: #fcfcfc;
+  --background-primary: #fdfbf5;
+  --background-success: #dcfce7;
+  --success: #00a63e;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --primary: #ffb47f;
+    --primary-semilight: #8c5d3d;
+    --primary-light: #4d3320;
+    --secondary: #dcd3cc;
+    --secondary-semilight: #a79990;
+    --secondary-light: #524741;
+    --background-white: #111111;
+    --background-primary: #1a1512;
+    --background-success: #1a4d2c;
+    --success: #34d399;
+  }
+}
+
+html,
+body,
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+@theme {
+  --default-font-family:
+    "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont,
+    system-ui, Roboto, "Helvetica Neue", "Segoe UI", "Apple SD Gothic Neo",
+    "Noto Sans KR", "Malgun Gothic", "Apple Color Emoji", "Segoe UI Emoji",
+    "Segoe UI Symbol", sans-serif;
+}
+
+@layer base {
+  * {
+    line-height: 1.2;
+  }
+
+  ::selection {
+    background-color: var(--color-secondary-semilight);
+    color: var(--color-background-white);
+  }
+}
+
+@layer utilities {
+  .scroll-animate {
+    animation-timeline: scroll();
+  }
+  .view-animate {
+    animation-timeline: view();
+  }
+}

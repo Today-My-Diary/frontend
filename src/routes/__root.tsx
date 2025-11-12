@@ -8,6 +8,18 @@ import { Toaster } from "@/components/ui/sonner";
 
 export const Route = createRootRoute({
   component: RootComponent,
+  head: () => ({
+    meta: [
+      {
+        title: "하루 필름 - 나만의 영상 일기",
+      },
+      {
+        name: "description",
+        content:
+          "매일 매일을 영상 일기로 기록하고, 나만의 변화를 추적해보세요. 하루 필름과 함께라면 소중한 기억을 놓치지 않고 간직할 수 있습니다.",
+      },
+    ],
+  }),
 });
 
 function RootComponent() {

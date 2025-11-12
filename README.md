@@ -18,6 +18,7 @@ pnpm dev
 ```text
 src/
 ├── api/                # API 클라이언트 (ky 기반)
+│   └── types/          # API 타입 정의
 ├── assets/             # 정적 리소스 (이미지, 폰트 등)
 ├── components/         # 재사용 가능한 공통 컴포넌트
 ├── config/             # 설정 파일 (환경변수, 상수 등)
@@ -28,6 +29,7 @@ src/
 │   └── _public/          # 인증되지 않은 사용자용 페이지들
 ├── stores/             # 전역 상태 관리 (Zustand)
 ├── types/              # TypeScript 타입 정의
+├── index.css           # 글로벌 스타일 & Tailwind 설정
 └── main.tsx            # 앱 진입점
 ```
 

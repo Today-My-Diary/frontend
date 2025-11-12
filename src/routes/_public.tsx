@@ -8,7 +8,6 @@ export const Route = createFileRoute("/_public")({
 function PublicLayout() {
   const { token } = useTokenStore();
 
-  console.log(token);
   if (token) {
     return <Navigate to="/my" />;
   }
