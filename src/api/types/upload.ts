@@ -1,4 +1,10 @@
 import { z } from "zod";
+import { TimestampSchema } from "@/api/types/video";
+
+export const PartSchema = z.object({
+  PartNumber: z.number(),
+  ETag: z.string(),
+});
 
 // Initiate Multipart Video Upload
 export const InitiateVideoUploadRequestSchema = z.object({
@@ -24,18 +30,8 @@ export const ContinueVideoUploadResponseSchema = z.object({
 export const CompleteVideoUploadRequestSchema = z.object({
   uploadId: z.string(),
   uploadDate: z.string(),
-  parts: z.array(
-    z.object({
-      PartNumber: z.number(),
-      ETag: z.string(),
-    }),
-  ),
-  timestamps: z.array(
-    z.object({
-      time: z.number(),
-      label: z.string(),
-    }),
-  ),
+  parts: z.array(PartSchema),
+  timestamps: z.array(TimestampSchema),
 });
 
 // Initiate Thumbnail Upload

@@ -9,7 +9,6 @@ import type { Timestamp } from "@/types/recording";
 import { useCallback, useState } from "react";
 import { useSnapshot } from "@/hooks/useSnapshot";
 
-// TODO: 이미 오늘 녹화본을 업로드한 사람 처리
 export const Route = createFileRoute("/_auth/record")({
   component: RouteComponent,
   notFoundComponent: () => <Navigate to="/record" replace />,

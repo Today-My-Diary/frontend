@@ -6,8 +6,14 @@ import { Header } from "@/components/ui/header";
 import google from "@/assets/icons/google_login.svg";
 import { Tooltip } from "@/components/ui/tooltip";
 import { env } from "@/config/env";
+import { z } from "zod";
+import { useEffect } from "react";
+import { useToast } from "@/hooks/useToast";
 
 export const Route = createFileRoute("/_public/login/")({
+  validateSearch: z.object({
+    noSession: z.boolean().optional(),
+  }),
   beforeLoad: async ({ context: { queryClient } }) => {
     const token = useTokenStore.getState().token;
 
@@ -32,6 +38,18 @@ export const Route = createFileRoute("/_public/login/")({
 });
 
 function RouteComponent() {
+  const { noSession } = Route.useSearch();
+  const { showToast } = useToast();
+
+  useEffect(() => {
+    if (noSession) {
+      showToast({
+        description: "세션이 만료되었습니다. 다시 로그인해주세요.",
+        type: "error",
+      });
+    }
+  }, [noSession, showToast]);
+
   return (
     <div className="bg-background-primary flex h-screen w-full flex-col">
       <Header />

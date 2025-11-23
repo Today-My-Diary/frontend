@@ -22,10 +22,10 @@ export const Route = createFileRoute("/_auth/record/studio")({
     return queryClient.ensureQueryData(questionQueryOptions());
   },
   pendingComponent: () => <div className="h-full w-full bg-black" />,
-  component: StudioPage,
+  component: RouteComponent,
 });
 
-function StudioPage() {
+function RouteComponent() {
   const navigate = useNavigate();
   const { showToast } = useToast();
   const { data } = useSuspenseQuery(questionQueryOptions());

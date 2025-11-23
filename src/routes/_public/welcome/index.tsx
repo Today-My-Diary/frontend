@@ -8,31 +8,31 @@ import { CardArea } from "./-components/CardArea";
 import { WiredFilms } from "@/components/WiredFilms";
 
 export const Route = createFileRoute("/_public/welcome/")({
-  component: WelcomePage,
+  component: RouteComponent,
 });
 
 const FILMS = [
   {
-    id: 1,
+    id: "1",
     date: "2025.10.02(목)",
     title: "가장 맛있었던 음식들",
     thumbnailUrl: "/thumbnail_sample_1.png",
   },
   {
-    id: 2,
+    id: "2",
     date: "2025.09.28(금)",
     title: "머릿속을 복잡하게 만드는 고민",
     thumbnailUrl: "/thumbnail_sample_2.png",
   },
   {
-    id: 3,
+    id: "3",
     date: "2025.09.15(일)",
     title: "무심코 놓쳤던 주위의 풍경",
     thumbnailUrl: "/thumbnail_sample_3.png",
   },
 ];
 
-function WelcomePage() {
+function RouteComponent() {
   return (
     <div className="bg-background-primary w-full">
       <Header>
