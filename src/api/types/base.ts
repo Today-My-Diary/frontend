@@ -5,7 +5,8 @@ export const BaseSuccessResponse = z.object({
 });
 
 export const BaseErrorResponse = z.object({
-  message: z.string(),
+  message: z.string().optional(),
+  error: z.string().optional(),
 });
 
 export class HandledToastError extends Error {

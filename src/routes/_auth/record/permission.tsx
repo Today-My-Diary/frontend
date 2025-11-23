@@ -1,11 +1,12 @@
 import { useEffect } from "react";
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, useNavigate, redirect } from "@tanstack/react-router";
 import { useRecordContext } from "./-contexts/RecordContext";
 import { Card } from "@/components/ui/card";
 import { FairyCharacter } from "@/components/FairyCharacter";
 import { Button } from "@/components/ui/button";
 import { StatusRow } from "@/components/StatusRow";
 import { useToast } from "@/hooks/useToast";
+import { queries } from "@/api";
 
 import camera_icon from "@/assets/icons/camera_icon.svg";
 import mic_icon from "@/assets/icons/mic_icon.svg";
@@ -13,6 +14,15 @@ import camera_green_icon from "@/assets/icons/camera_green_icon.svg";
 import mic_green_icon from "@/assets/icons/mic_green_icon.svg";
 
 export const Route = createFileRoute("/_auth/record/permission")({
+  loader: async ({ context: { queryClient } }) => {
+    const todayVideo = await queryClient.ensureQueryData(queries.videos.today);
+    if (todayVideo.todayVideoExists) {
+      throw redirect({
+        to: "/my",
+        replace: true,
+      });
+    }
+  },
   component: RouteComponent,
 });
 
