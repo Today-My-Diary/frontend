@@ -44,7 +44,7 @@ function RouteComponent() {
     thumbnailUrl: video.thumbnailS3Url,
   }));
 
-  const handleFilmClick = (id: string) => navigate({ to: `/video/${id}` });
+  const handleFilmClick = (date: string) => navigate({ to: `/video/${date}` });
 
   return (
     <div className="bg-background-primary w-full">

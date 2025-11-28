@@ -15,11 +15,14 @@ const buttonVariants = cva(
         secondary: "bg-secondary-semilight text-white hover:opacity-90",
         white: "bg-white/40 text-white hover:bg-white/50",
         ghost: "bg-transparent text-secondary",
+        glass:
+          "bg-black/40 text-white backdrop-blur-sm hover:bg-black/60 border-none font-light",
       },
       size: {
         sm: "px-3 py-1.5 text-sm",
         md: "px-5 py-2 text-base",
         lg: "px-8 py-3.5 text-lg",
+        icon: "h-9 w-9 p-2 flex items-center justify-center",
       },
     },
     defaultVariants: {

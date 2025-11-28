@@ -4,6 +4,7 @@ import { tryJson, toastError } from "@/lib/request";
 import {
   CalendarResponseSchema,
   TodayVideoResponseSchema,
+  VideoDetailResponseSchema,
 } from "./types/video";
 
 export const videoQueries = createQueryKeys("videos", {
@@ -25,4 +26,12 @@ export const videoQueries = createQueryKeys("videos", {
       return toastError(res, response);
     },
   },
+  detail: (date: string) => ({
+    queryKey: [date],
+    queryFn: async () => {
+      const res = await ky.get(`videos/${date}`);
+      const response = tryJson(await res.text(), VideoDetailResponseSchema);
+      return toastError(res, response);
+    },
+  }),
 });

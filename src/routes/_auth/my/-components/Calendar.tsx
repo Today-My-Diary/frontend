@@ -8,7 +8,7 @@ import { FallbackBoundary } from "@/components/FallbackBoundary";
 
 interface CalendarGridProps {
   date: Date;
-  onClick: (id: string) => void;
+  onClick: (date: string) => void;
 }
 
 const calendarQueryOptions = (date: Date) => {
@@ -55,19 +55,24 @@ function CalendarGrid({ date, onClick }: CalendarGridProps) {
         return (
           <div key={day} className="group relative aspect-square">
             {video ? (
-              <div
+              <button
+                type="button"
                 className="border-primary-semilight bg-primary-light relative flex h-full w-full overflow-hidden rounded-lg border shadow-sm transition-transform duration-300 group-hover:z-30 group-hover:scale-125 group-hover:rotate-3"
-                onClick={() => onClick(video.videoId)}
+                onClick={() =>
+                  onClick(video.uploadDate.toISOString().split("T")[0])
+                }
               >
                 <img
                   src={video.thumbnailS3Url}
                   alt={`${day}일 기록`}
+                  loading="lazy"
+                  decoding="async"
                   className="h-full w-full object-cover"
                 />
                 <div className="absolute inset-0 z-20 flex cursor-pointer items-center justify-center bg-black opacity-15 transition-opacity duration-300 group-hover:opacity-0">
                   <span className="text-md text-white">{day}</span>
                 </div>
-              </div>
+              </button>
             ) : (
               <div className="text-secondary-semilight text-md border-primary-semilight flex h-full w-full items-center justify-center rounded-lg border bg-white/40 transition hover:scale-[1.02]">
                 {day}
@@ -81,7 +86,7 @@ function CalendarGrid({ date, onClick }: CalendarGridProps) {
 }
 
 interface CalendarProps {
-  onClick: (id: string) => void;
+  onClick: (date: string) => void;
 }
 
 export function Calendar({ onClick }: CalendarProps) {

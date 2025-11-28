@@ -23,4 +23,10 @@ export const TodayVideoResponseSchema = z.object({
   pastVideos: z.array(PastVideoSchema),
 });
 
+export const VideoDetailResponseSchema = z.object({
+  s3Url: z.url(),
+  timestamps: z.array(TimestampSchema),
+  encoded: z.boolean(),
+});
+
 export const CalendarResponseSchema = z.array(CalendarVideoSchema);

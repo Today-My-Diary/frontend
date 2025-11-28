@@ -1,16 +1,17 @@
 import { createFileRoute, Navigate, useNavigate } from "@tanstack/react-router";
 import { useRecordContext } from "./-contexts/RecordContext";
 import { useEffect, useMemo, useState } from "react";
+
 import { Button } from "@/components/ui/button";
 import { VideoPlayer } from "@/components/VideoPlayer";
 import { StatusRow } from "@/components/StatusRow";
+import { Loading } from "@/components/Loading";
+import type { SeekCommand } from "@/types/recording";
+import { formatDuration } from "@/lib/utils";
 
 import one_icon from "@/assets/icons/1_icon.svg";
 import two_icon from "@/assets/icons/2_icon.svg";
 import three_icon from "@/assets/icons/3_icon.svg";
-import { Loading } from "@/components/Loading";
-import type { SeekCommand } from "@/types/recording";
-import { formatDuration } from "@/lib/utils";
 
 export const Route = createFileRoute("/_auth/record/preview")({
   component: RouteComponent,

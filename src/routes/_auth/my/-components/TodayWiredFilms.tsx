@@ -3,7 +3,7 @@ import { FairyCharacter } from "@/components/FairyCharacter";
 
 interface TodayWiredFilmsProps {
   films: WiredFilm[];
-  onClick: (id: string) => void;
+  onClick: (date: string) => void;
 }
 
 export function TodayWiredFilms({ films, onClick }: TodayWiredFilmsProps) {

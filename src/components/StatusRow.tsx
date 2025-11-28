@@ -2,7 +2,7 @@ import { cn } from "@/lib/utils";
 import { cva, type VariantProps } from "class-variance-authority";
 
 const statusRowVariants = cva(
-  "flex w-full items-center gap-4 rounded-md px-5 py-2.5 transition",
+  "flex w-full items-center gap-4 rounded-md px-5 py-2.5 transition text-left",
   {
     variants: {
       variant: {
@@ -31,7 +31,8 @@ export function StatusRow({
   onClick,
 }: StatusRowProps) {
   return (
-    <div
+    <button
+      type="button"
       className={cn(
         statusRowVariants({ variant }),
         onClick && "cursor-pointer hover:scale-[1.01] hover:opacity-90",
@@ -45,6 +46,6 @@ export function StatusRow({
           <p className="text-secondary mt-0.5 text-xs">{description}</p>
         )}
       </div>
-    </div>
+    </button>
   );
 }

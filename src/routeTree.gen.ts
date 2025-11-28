@@ -24,7 +24,7 @@ import { Route as AuthRecordThumbnailRouteImport } from './routes/_auth/record/t
 import { Route as AuthRecordStudioRouteImport } from './routes/_auth/record/studio'
 import { Route as AuthRecordPreviewRouteImport } from './routes/_auth/record/preview'
 import { Route as AuthRecordPermissionRouteImport } from './routes/_auth/record/permission'
-import { Route as AuthVideoIdIndexRouteImport } from './routes/_auth/video/$id/index'
+import { Route as AuthVideoDateIndexRouteImport } from './routes/_auth/video/$date/index'
 
 const PublicRoute = PublicRouteImport.update({
   id: '/_public',
@@ -99,9 +99,9 @@ const AuthRecordPermissionRoute = AuthRecordPermissionRouteImport.update({
   path: '/permission',
   getParentRoute: () => AuthRecordRoute,
 } as any)
-const AuthVideoIdIndexRoute = AuthVideoIdIndexRouteImport.update({
-  id: '/video/$id/',
-  path: '/video/$id/',
+const AuthVideoDateIndexRoute = AuthVideoDateIndexRouteImport.update({
+  id: '/video/$date/',
+  path: '/video/$date/',
   getParentRoute: () => AuthRoute,
 } as any)
 
@@ -119,7 +119,7 @@ export interface FileRoutesByFullPath {
   '/record/': typeof AuthRecordIndexRoute
   '/login': typeof PublicLoginIndexRoute
   '/welcome': typeof PublicWelcomeIndexRoute
-  '/video/$id': typeof AuthVideoIdIndexRoute
+  '/video/$date': typeof AuthVideoDateIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -134,7 +134,7 @@ export interface FileRoutesByTo {
   '/record': typeof AuthRecordIndexRoute
   '/login': typeof PublicLoginIndexRoute
   '/welcome': typeof PublicWelcomeIndexRoute
-  '/video/$id': typeof AuthVideoIdIndexRoute
+  '/video/$date': typeof AuthVideoDateIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -153,7 +153,7 @@ export interface FileRoutesById {
   '/_auth/record/': typeof AuthRecordIndexRoute
   '/_public/login/': typeof PublicLoginIndexRoute
   '/_public/welcome/': typeof PublicWelcomeIndexRoute
-  '/_auth/video/$id/': typeof AuthVideoIdIndexRoute
+  '/_auth/video/$date/': typeof AuthVideoDateIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -171,7 +171,7 @@ export interface FileRouteTypes {
     | '/record/'
     | '/login'
     | '/welcome'
-    | '/video/$id'
+    | '/video/$date'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -186,7 +186,7 @@ export interface FileRouteTypes {
     | '/record'
     | '/login'
     | '/welcome'
-    | '/video/$id'
+    | '/video/$date'
   id:
     | '__root__'
     | '/'
@@ -204,7 +204,7 @@ export interface FileRouteTypes {
     | '/_auth/record/'
     | '/_public/login/'
     | '/_public/welcome/'
-    | '/_auth/video/$id/'
+    | '/_auth/video/$date/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -320,11 +320,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthRecordPermissionRouteImport
       parentRoute: typeof AuthRecordRoute
     }
-    '/_auth/video/$id/': {
-      id: '/_auth/video/$id/'
-      path: '/video/$id'
-      fullPath: '/video/$id'
-      preLoaderRoute: typeof AuthVideoIdIndexRouteImport
+    '/_auth/video/$date/': {
+      id: '/_auth/video/$date/'
+      path: '/video/$date'
+      fullPath: '/video/$date'
+      preLoaderRoute: typeof AuthVideoDateIndexRouteImport
       parentRoute: typeof AuthRoute
     }
   }
@@ -355,13 +355,13 @@ const AuthRecordRouteWithChildren = AuthRecordRoute._addFileChildren(
 interface AuthRouteChildren {
   AuthRecordRoute: typeof AuthRecordRouteWithChildren
   AuthMyIndexRoute: typeof AuthMyIndexRoute
-  AuthVideoIdIndexRoute: typeof AuthVideoIdIndexRoute
+  AuthVideoDateIndexRoute: typeof AuthVideoDateIndexRoute
 }
 
 const AuthRouteChildren: AuthRouteChildren = {
   AuthRecordRoute: AuthRecordRouteWithChildren,
   AuthMyIndexRoute: AuthMyIndexRoute,
-  AuthVideoIdIndexRoute: AuthVideoIdIndexRoute,
+  AuthVideoDateIndexRoute: AuthVideoDateIndexRoute,
 }
 
 const AuthRouteWithChildren = AuthRoute._addFileChildren(AuthRouteChildren)

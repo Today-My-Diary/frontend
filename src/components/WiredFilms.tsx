@@ -3,7 +3,7 @@ import { cn } from "@/lib/utils";
 
 interface WiredFilmsProps {
   films: WiredFilm[];
-  onFilmClick?: (id: string) => void;
+  onFilmClick?: (date: string) => void;
 }
 
 export interface WiredFilm {
@@ -19,9 +19,10 @@ export function WiredFilms({ films, onFilmClick }: WiredFilmsProps) {
       <div className="bg-secondary h-0.5 w-[70%] rounded-full" />
       <div className="flex justify-center gap-8 pt-2">
         {films.map((film) => (
-          <div
+          <button
             key={film.id}
-            onClick={() => onFilmClick?.(film.id)}
+            type="button"
+            onClick={() => onFilmClick?.(film.date)}
             className={cn(
               "relative flex flex-col items-center",
               onFilmClick && "cursor-pointer",
@@ -40,7 +41,7 @@ export function WiredFilms({ films, onFilmClick }: WiredFilmsProps) {
                 <span className="text-lg font-semibold">{film.title}</span>
               </div>
             </Card>
-          </div>
+          </button>
         ))}
       </div>
     </div>
