@@ -18,13 +18,14 @@ export function WiredFilms({ films, onFilmClick }: WiredFilmsProps) {
     <div className="flex w-full flex-col items-center">
       <div className="bg-secondary h-0.5 w-[70%] rounded-full" />
       <div className="flex justify-center gap-8 pt-2">
-        {films.map((film) => (
+        {films.map((film, index) => (
           <button
             key={film.id}
             type="button"
             onClick={() => onFilmClick?.(film.date)}
             className={cn(
               "relative flex flex-col items-center",
+              index === 0 ? "flex" : "hidden md:flex",
               onFilmClick && "cursor-pointer",
             )}
           >

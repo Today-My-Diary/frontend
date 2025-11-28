@@ -55,7 +55,7 @@ function RouteComponent() {
       <Header />
       <main className="flex h-full grow flex-col items-center justify-center">
         <FairyCharacter size={100} />
-        <h2 className="text-secondary mb-10 text-center text-3xl font-bold">
+        <h2 className="text-secondary mb-10 text-center text-2xl font-bold md:text-3xl">
           5초 만에 시작하는 나만의 이야기
         </h2>
         <Tooltip className="animate-bounce">로그인 / 회원가입</Tooltip>

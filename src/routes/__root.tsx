@@ -51,7 +51,7 @@ function GlobalErrorComponent({ error, reset }: ErrorComponentProps) {
       <h1 className="text-secondary text-2xl font-bold">
         오류가 발생했습니다.
       </h1>
-      <p className="text-secondary-semilight text-center break-keep">
+      <p className="text-secondary-semilight text-center">
         {error.message || "알 수 없는 오류가 발생했습니다."}
       </p>
       <div className="flex gap-4">
