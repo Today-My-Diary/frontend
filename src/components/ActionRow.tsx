@@ -46,7 +46,9 @@ export function ActionRow({
         {icon}
       </div>
       <div>
-        <p className="text-md text-secondary mt-1 font-semibold">{title}</p>
+        <p className="text-md text-secondary mt-1 font-semibold break-keep">
+          {title}
+        </p>
         {description && (
           <p className="text-secondary mt-0.5 text-xs">{description}</p>
         )}
