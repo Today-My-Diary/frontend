@@ -8,16 +8,13 @@ import { mutations, queries } from "@/api";
 import { useTokenStore } from "@/stores/useTokenStore";
 import { useToast } from "@/hooks/useToast";
 import { Card } from "@/components/ui/card";
-import { StatusRow } from "@/components/StatusRow";
+import { ActionRow } from "@/components/ActionRow";
 import { VideoPlayer } from "@/components/VideoPlayer";
 import { Loading } from "@/components/Loading";
 import { EncodingStatus } from "./-components/EncodingStatus";
 import type { SeekCommand } from "@/types/recording";
 import { formatDuration } from "@/lib/utils";
-
-import one_icon from "@/assets/icons/1_icon.svg";
-import two_icon from "@/assets/icons/2_icon.svg";
-import three_icon from "@/assets/icons/3_icon.svg";
+import { NumberBadge } from "@/components/NumberBadge";
 
 export const Route = createFileRoute("/_auth/video/$date/")({
   loader: ({ context: { queryClient }, params: { date } }) => {
@@ -85,12 +82,10 @@ function RouteComponent() {
           </h2>
           <div className="mt-3 flex w-full flex-col gap-4">
             {data.timestamps.map((timestamp, index) => (
-              <StatusRow
+              <ActionRow
                 key={index}
-                imgSrc={
-                  index === 0 ? one_icon : index === 1 ? two_icon : three_icon
-                }
-                content={timestamp.label}
+                icon={<NumberBadge number={index + 1} />}
+                title={timestamp.label}
                 description={formatDuration(timestamp.time)}
                 onClick={() => handleTimestampClick(index)}
               />

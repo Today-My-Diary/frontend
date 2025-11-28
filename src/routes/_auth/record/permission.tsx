@@ -4,7 +4,7 @@ import { useRecordContext } from "./-contexts/RecordContext";
 import { Card } from "@/components/ui/card";
 import { FairyCharacter } from "@/components/FairyCharacter";
 import { Button } from "@/components/ui/button";
-import { StatusRow } from "@/components/StatusRow";
+import { ActionRow } from "@/components/ActionRow";
 import { useToast } from "@/hooks/useToast";
 import { queries } from "@/api";
 
@@ -72,16 +72,28 @@ function RouteComponent() {
         </div>
 
         <div className="flex w-full flex-col gap-2">
-          <StatusRow
+          <ActionRow
             variant={permissionStatus.video ? "success" : "default"}
-            imgSrc={permissionStatus.video ? camera_green_icon : camera_icon}
-            content="카메라"
+            icon={
+              <img
+                src={permissionStatus.video ? camera_green_icon : camera_icon}
+                alt="camera"
+                className="size-8"
+              />
+            }
+            title="카메라"
             description={`권한 ${permissionStatus.video ? "허용됨" : "필요"}`}
           />
-          <StatusRow
+          <ActionRow
             variant={permissionStatus.audio ? "success" : "default"}
-            imgSrc={permissionStatus.audio ? mic_green_icon : mic_icon}
-            content="마이크"
+            icon={
+              <img
+                src={permissionStatus.audio ? mic_green_icon : mic_icon}
+                alt="mic"
+                className="size-8"
+              />
+            }
+            title="마이크"
             description={`권한 ${permissionStatus.audio ? "허용됨" : "필요"}`}
           />
         </div>

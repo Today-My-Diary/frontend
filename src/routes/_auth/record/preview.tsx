@@ -4,14 +4,12 @@ import { useEffect, useMemo, useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import { VideoPlayer } from "@/components/VideoPlayer";
-import { StatusRow } from "@/components/StatusRow";
+import { ActionRow } from "@/components/ActionRow";
 import { Loading } from "@/components/Loading";
 import type { SeekCommand } from "@/types/recording";
 import { formatDuration } from "@/lib/utils";
 
-import one_icon from "@/assets/icons/1_icon.svg";
-import two_icon from "@/assets/icons/2_icon.svg";
-import three_icon from "@/assets/icons/3_icon.svg";
+import { NumberBadge } from "@/components/NumberBadge";
 
 export const Route = createFileRoute("/_auth/record/preview")({
   component: RouteComponent,
@@ -66,12 +64,10 @@ function RouteComponent() {
 
         <div className="bg-background-primary flex w-full max-w-3xl flex-col gap-4 rounded-b-lg p-8 shadow-sm">
           {timestamps.map((item, index) => (
-            <StatusRow
+            <ActionRow
               key={index}
-              imgSrc={
-                index === 0 ? one_icon : index === 1 ? two_icon : three_icon
-              }
-              content={item.label}
+              icon={<NumberBadge number={index + 1} />}
+              title={item.label}
               description={formatDuration(item.time)}
               onClick={() => handleTimestampClick(index)}
             />
