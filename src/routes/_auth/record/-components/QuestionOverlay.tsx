@@ -17,12 +17,12 @@ export function QuestionOverlay({
   const isLast = index === totalCount - 1;
 
   return (
-    <div className="absolute right-0 bottom-15 left-0 z-10 flex flex-col items-center gap-6">
+    <div className="absolute right-0 bottom-15 left-0 z-10 flex flex-col items-center gap-6 px-2">
       <div className="flex flex-col items-center gap-4 rounded-lg bg-black/60 p-8 text-center shadow-lg backdrop-blur-sm">
         <span className="text-md text-white">{index + 1}번째 질문</span>
         <h2
           key={index}
-          className="animate-in fade-in zoom-in-95 text-xl font-semibold text-white duration-300"
+          className="animate-in fade-in zoom-in-95 text-lg font-semibold break-keep text-white duration-300 md:text-xl"
         >
           {question}
         </h2>

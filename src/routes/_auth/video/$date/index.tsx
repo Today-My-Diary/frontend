@@ -8,16 +8,13 @@ import { mutations, queries } from "@/api";
 import { useTokenStore } from "@/stores/useTokenStore";
 import { useToast } from "@/hooks/useToast";
 import { Card } from "@/components/ui/card";
-import { StatusRow } from "@/components/StatusRow";
+import { ActionRow } from "@/components/ActionRow";
 import { VideoPlayer } from "@/components/VideoPlayer";
 import { Loading } from "@/components/Loading";
 import { EncodingStatus } from "./-components/EncodingStatus";
 import type { SeekCommand } from "@/types/recording";
 import { formatDuration } from "@/lib/utils";
-
-import one_icon from "@/assets/icons/1_icon.svg";
-import two_icon from "@/assets/icons/2_icon.svg";
-import three_icon from "@/assets/icons/3_icon.svg";
+import { NumberBadge } from "@/components/NumberBadge";
 
 export const Route = createFileRoute("/_auth/video/$date/")({
   loader: ({ context: { queryClient }, params: { date } }) => {
@@ -61,14 +58,14 @@ function RouteComponent() {
           로그아웃
         </Button>
       </Header>
-      <main className="flex items-start gap-10 p-10">
+      <main className="flex flex-col items-start gap-6 p-4 lg:flex-row lg:gap-10 lg:p-10">
         <Card
           variant="white"
-          padding="lg"
-          className="relative flex-1 hover:scale-100"
+          padding="xl"
+          className="relative w-full flex-1 hover:scale-100"
         >
           <EncodingStatus encoded={data.encoded} />
-          <div className="text-center">
+          <div className="mt-5 text-center md:mt-0">
             <h2 className="text-secondary text-lg font-semibold">{title}</h2>
             <p className="text-secondary text-sm">{date}</p>
           </div>
@@ -79,18 +76,20 @@ function RouteComponent() {
             seekCommand={seekCommand}
           />
         </Card>
-        <Card variant="white" padding="lg" className="flex-1 hover:scale-100">
+        <Card
+          variant="white"
+          padding="xl"
+          className="w-full flex-1 hover:scale-100"
+        >
           <h2 className="text-secondary text-lg font-semibold">
             이 날의 이야기
           </h2>
-          <div className="mt-3 flex w-full flex-col gap-4">
+          <div className="mt-3 flex w-full flex-col gap-2 md:gap-4">
             {data.timestamps.map((timestamp, index) => (
-              <StatusRow
+              <ActionRow
                 key={index}
-                imgSrc={
-                  index === 0 ? one_icon : index === 1 ? two_icon : three_icon
-                }
-                content={timestamp.label}
+                icon={<NumberBadge number={index + 1} />}
+                title={timestamp.label}
                 description={formatDuration(timestamp.time)}
                 onClick={() => handleTimestampClick(index)}
               />

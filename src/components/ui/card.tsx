@@ -14,10 +14,10 @@ const cardVariants = cva(
       },
       padding: {
         none: "p-0",
-        sm: "p-4",
-        md: "p-6",
-        lg: "p-8",
-        xl: "p-10",
+        sm: "p-2 md:p-4",
+        md: "p-3 md:p-6",
+        lg: "p-4 md:p-8",
+        xl: "p-5 md:p-10",
       },
     },
     defaultVariants: {

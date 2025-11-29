@@ -127,7 +127,10 @@ export function VideoPlayer({
       hlsRef.current = null;
     }
 
-    if (isHls && Hls.isSupported()) {
+    if (isHls && video.canPlayType("application/vnd.apple.mpegurl")) {
+      video.src = videoUrl;
+      console.log("VideoPlayer: Native HLS Mode");
+    } else if (isHls && Hls.isSupported()) {
       const hls = new Hls();
       hlsRef.current = hls;
 
@@ -149,9 +152,6 @@ export function VideoPlayer({
         });
         console.log("VideoPlayer: HLS Ready");
       });
-    } else if (isHls && video.canPlayType("application/vnd.apple.mpegurl")) {
-      video.src = videoUrl;
-      console.log("VideoPlayer: Native HLS Mode");
     } else {
       video.src = videoUrl;
     }

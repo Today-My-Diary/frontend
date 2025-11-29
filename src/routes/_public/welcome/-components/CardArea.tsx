@@ -26,7 +26,7 @@ const FEATURES = [
 
 export function CardArea() {
   return (
-    <div className="mt-10 mb-40 flex w-full justify-center gap-8">
+    <div className="mt-10 mb-40 flex w-full flex-wrap justify-center gap-8">
       {FEATURES.map((feature) => (
         <Card key={feature.title} className="text-secondary w-80">
           <img
@@ -35,7 +35,9 @@ export function CardArea() {
             className="mb-3 h-12 w-12"
           />
           <h3 className="text-center text-lg font-semibold">{feature.title}</h3>
-          <p className="text-center text-base">{feature.description}</p>
+          <p className="text-center text-base break-keep">
+            {feature.description}
+          </p>
         </Card>
       ))}
     </div>

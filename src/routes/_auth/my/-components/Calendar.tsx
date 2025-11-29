@@ -47,7 +47,7 @@ function CalendarGrid({ date, onClick }: CalendarGridProps) {
   });
 
   return (
-    <div className="grid grid-cols-7 gap-4 font-medium">
+    <div className="grid grid-cols-7 gap-1 font-medium md:gap-4">
       {days.map((day, index) => {
         if (!day) return <div key={`empty-${index}`} />;
         const video = videosByDay.get(day);
@@ -129,13 +129,13 @@ export function Calendar({ onClick }: CalendarProps) {
   };
 
   return (
-    <div className="bg-primary-light w-full max-w-5xl rounded-xl p-10 shadow-md">
+    <div className="bg-primary-light w-full max-w-5xl rounded-xl p-3 shadow-md md:p-10">
       <div className="mb-8 flex items-center justify-between px-4">
-        <Button variant="ghost" onClick={handlePrevMonth}>
+        <Button variant="ghost" size="sm" onClick={handlePrevMonth}>
           &lt;
         </Button>
-        <div className="flex items-center gap-4">
-          <span className="text-secondary text-xl font-bold">
+        <div className="flex items-center gap-1 md:gap-4">
+          <span className="text-secondary text-md font-bold md:text-xl">
             {date.getFullYear()}년 {date.getMonth() + 1}월
           </span>
           <Button
@@ -149,6 +149,7 @@ export function Calendar({ onClick }: CalendarProps) {
         </div>
         <Button
           variant="ghost"
+          size="sm"
           onClick={handleNextMonth}
           disabled={isCurrentMonth}
         >
@@ -173,19 +174,19 @@ export function Calendar({ onClick }: CalendarProps) {
       </div>
 
       {/* 달력 그리드 */}
-      <div className="min-h-96">
+      <div className="min-h-40">
         <FallbackBoundary
           Fallback={({ type, resetErrorBoundary }) => {
             if (type === "loading") {
               return (
-                <div className="flex h-96 w-full items-center justify-center">
+                <div className="flex h-40 w-full items-center justify-center">
                   <Loading variant="primary" />
                 </div>
               );
             }
             if (type === "error") {
               return (
-                <div className="flex h-96 w-full flex-col items-center justify-center gap-4">
+                <div className="flex h-40 w-full flex-col items-center justify-center gap-4">
                   <p className="text-secondary font-medium">
                     달력 정보를 불러오지 못했습니다.
                   </p>

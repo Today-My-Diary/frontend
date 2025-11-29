@@ -62,8 +62,8 @@ function RouteComponent() {
   }
 
   return (
-    <div className="bg-secondary-light text-secondary flex h-full w-full flex-col items-center justify-center">
-      <Card variant="primary" className="min-w-xs gap-0">
+    <div className="bg-secondary-light text-secondary flex h-full w-full flex-col items-center justify-center px-2">
+      <Card variant="primary" className="w-full max-w-xs gap-0">
         <FairyCharacter size={80} />
         <p className="text-lg font-semibold">
           {isError

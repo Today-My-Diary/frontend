@@ -1,7 +1,8 @@
-import { cn } from "@/lib/utils";
 import { cva, type VariantProps } from "class-variance-authority";
+import type { ReactNode } from "react";
+import { cn } from "@/lib/utils";
 
-const statusRowVariants = cva(
+const actionRowVariants = cva(
   "flex w-full items-center gap-4 rounded-md px-5 py-2.5 transition text-left",
   {
     variants: {
@@ -16,36 +17,42 @@ const statusRowVariants = cva(
   },
 );
 
-interface StatusRowProps extends VariantProps<typeof statusRowVariants> {
-  imgSrc: string;
-  content: string;
+interface ActionRowProps extends VariantProps<typeof actionRowVariants> {
+  icon?: ReactNode;
+  title: string;
   description?: string;
   onClick?: () => void;
 }
 
-export function StatusRow({
+export function ActionRow({
   variant,
-  imgSrc,
-  content,
+  icon,
+  title,
   description,
   onClick,
-}: StatusRowProps) {
+}: ActionRowProps) {
+  const Component = onClick ? "button" : "div";
+
   return (
-    <button
-      type="button"
+    <Component
+      type={onClick ? "button" : undefined}
       className={cn(
-        statusRowVariants({ variant }),
+        actionRowVariants({ variant }),
         onClick && "cursor-pointer hover:scale-[1.01] hover:opacity-90",
       )}
       onClick={onClick}
     >
-      <img src={imgSrc} alt="Icon" className="size-10" />
+      <div className="flex size-10 shrink-0 items-center justify-center">
+        {icon}
+      </div>
       <div>
-        <p className="text-md text-secondary mt-1 font-semibold">{content}</p>
+        <p className="text-md text-secondary mt-1 font-semibold break-keep">
+          {title}
+        </p>
         {description && (
           <p className="text-secondary mt-0.5 text-xs">{description}</p>
         )}
       </div>
-    </button>
+    </Component>
   );
 }

@@ -61,7 +61,7 @@ function RouteComponent() {
         ) : (
           <RecordActionArea />
         )}
-        <section className="text-secondary text-md flex w-full flex-col items-center gap-3 font-semibold">
+        <section className="text-secondary text-md flex w-full flex-col items-center gap-3 px-4 font-semibold">
           <div>나만의 필름 다이어리</div>
           <Calendar onClick={handleFilmClick} />
         </section>

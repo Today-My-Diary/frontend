@@ -4,14 +4,12 @@ import { useEffect, useMemo, useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import { VideoPlayer } from "@/components/VideoPlayer";
-import { StatusRow } from "@/components/StatusRow";
+import { ActionRow } from "@/components/ActionRow";
 import { Loading } from "@/components/Loading";
 import type { SeekCommand } from "@/types/recording";
 import { formatDuration } from "@/lib/utils";
 
-import one_icon from "@/assets/icons/1_icon.svg";
-import two_icon from "@/assets/icons/2_icon.svg";
-import three_icon from "@/assets/icons/3_icon.svg";
+import { NumberBadge } from "@/components/NumberBadge";
 
 export const Route = createFileRoute("/_auth/record/preview")({
   component: RouteComponent,
@@ -51,27 +49,25 @@ function RouteComponent() {
   }
 
   return (
-    <div className="bg-secondary-light flex min-h-full w-full flex-col items-center gap-10 py-10">
-      <h1 className="text-secondary text-3xl font-bold">
+    <div className="bg-secondary-light flex min-h-full w-full flex-col items-center gap-10 px-4 py-10">
+      <h1 className="text-secondary text-2xl font-bold md:text-3xl">
         오늘의 기록을 확인해보세요!
       </h1>
 
-      <div>
+      <div className="bg-background-primary w-full max-w-3xl overflow-hidden rounded-lg shadow-sm">
         <VideoPlayer
-          className="w-3xl rounded-t-lg shadow-sm"
+          className="w-full shadow-sm"
           videoUrl={blobURL || ""}
           timestamps={timestamps}
           seekCommand={seekCommand}
         />
 
-        <div className="bg-background-primary flex w-full max-w-3xl flex-col gap-4 rounded-b-lg p-8 shadow-sm">
+        <div className="flex w-full flex-col gap-4 p-8">
           {timestamps.map((item, index) => (
-            <StatusRow
+            <ActionRow
               key={index}
-              imgSrc={
-                index === 0 ? one_icon : index === 1 ? two_icon : three_icon
-              }
-              content={item.label}
+              icon={<NumberBadge number={index + 1} />}
+              title={item.label}
               description={formatDuration(item.time)}
               onClick={() => handleTimestampClick(index)}
             />
@@ -79,7 +75,7 @@ function RouteComponent() {
         </div>
       </div>
 
-      <div className="flex w-full justify-center gap-6">
+      <div className="flex w-full justify-center gap-4">
         <Button onClick={handleRetake} variant="secondary">
           다시 촬영하기
         </Button>
