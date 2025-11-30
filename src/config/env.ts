@@ -10,6 +10,16 @@ const envSchema = z.object({
   VITE_API_URL: z.url(),
   VITE_S3_BUCKET_URL: z.url(),
 
+  // Firebase 환경변수
+  VITE_FIREBASE_API_KEY: z.string(),
+  VITE_FIREBASE_AUTH_DOMAIN: z.string(),
+  VITE_FIREBASE_PROJECT_ID: z.string(),
+  VITE_FIREBASE_STORAGE_BUCKET: z.string(),
+  VITE_FIREBASE_MESSAGING_SENDER_ID: z.string(),
+  VITE_FIREBASE_APP_ID: z.string(),
+  VITE_FIREBASE_MEASUREMENT_ID: z.string(),
+  VITE_FIREBASE_VAPID_KEY: z.string(),
+
   // 아래는 VITE 기본 환경변수
   DEV: z.boolean().default(false),
   PROD: z.boolean().default(true),
