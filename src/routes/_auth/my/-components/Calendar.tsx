@@ -69,7 +69,7 @@ function CalendarGrid({ date, onClick }: CalendarGridProps) {
                   decoding="async"
                   className="h-full w-full object-cover"
                 />
-                <div className="absolute inset-0 z-20 flex cursor-pointer items-center justify-center bg-black opacity-15 transition-opacity duration-300 group-hover:opacity-0">
+                <div className="absolute inset-0 z-20 flex cursor-pointer items-center justify-center bg-black opacity-30 transition-opacity duration-300 group-hover:opacity-0">
                   <span className="text-md text-white">{day}</span>
                 </div>
               </button>

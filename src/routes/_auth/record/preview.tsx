@@ -10,6 +10,7 @@ import type { SeekCommand } from "@/types/recording";
 import { formatDuration } from "@/lib/utils";
 
 import { NumberBadge } from "@/components/NumberBadge";
+import { useModalStore } from "@/stores/useModalStore";
 
 export const Route = createFileRoute("/_auth/record/preview")({
   component: RouteComponent,
@@ -19,6 +20,7 @@ function RouteComponent() {
   const navigate = useNavigate();
   const { recordedBlob, timestamps } = useRecordContext();
   const [seekCommand, setSeekCommand] = useState<SeekCommand | null>(null);
+  const { confirm } = useModalStore();
 
   const blobURL = useMemo(() => {
     return recordedBlob ? URL.createObjectURL(recordedBlob) : "";
@@ -34,8 +36,13 @@ function RouteComponent() {
     });
   };
 
-  const handleRetake = () => {
-    if (confirm("다시 촬영하시겠습니까? 현재 영상은 삭제됩니다.")) {
+  const handleRetake = async () => {
+    const isConfirmed = await confirm({
+      title: "다시 촬영하기",
+      description:
+        "지금까지 촬영한 내용은 전부 사라집니다. \n정말로 다시 촬영하시겠습니까?",
+    });
+    if (isConfirmed) {
       navigate({ to: "/record/studio", mask: { to: "/record" } });
     }
   };
