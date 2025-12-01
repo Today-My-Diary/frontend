@@ -9,6 +9,7 @@ import type { QueryClient } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/sonner";
 import { env } from "@/config/env";
 import { Button } from "@/components/ui/button";
+import { ConfirmModal } from "@/components/ConfirmModal";
 
 interface RouterContext {
   queryClient: QueryClient;
@@ -69,6 +70,7 @@ function RootComponent() {
     <>
       <Outlet />
       <Toaster />
+      <ConfirmModal />
       {env.DEV && <TanStackRouterDevtools />}
     </>
   );

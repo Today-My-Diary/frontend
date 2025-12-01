@@ -7,8 +7,9 @@
     "node": ">=18.18.0"
   },
   "scripts": {
-    "dev": "vite",
-    "build": "tsc -b && vite build",
+    "generate-worker": "node scripts/generateWorker.js",
+    "dev": "pnpm generate-worker && vite",
+    "build": "pnpm generate-worker && tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview"
   },
@@ -18,6 +19,7 @@
     "@tanstack/react-router": "^1.134.9",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+    "firebase": "^12.6.0",
     "fix-webm-duration": "^1.0.6",
     "hls.js": "^1.6.15",
     "ky": "^1.13.0",
@@ -42,6 +44,7 @@
     "@types/react-dom": "^19.2.2",
     "@vitejs/plugin-react": "^5.0.4",
     "babel-plugin-react-compiler": "19.1.0-rc.3",
+    "dotenv": "^17.2.3",
     "eslint": "^9.36.0",
     "eslint-plugin-react": "^7.37.5",
     "eslint-plugin-react-hooks": "^6.1.1",

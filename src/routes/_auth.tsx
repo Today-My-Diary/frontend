@@ -1,6 +1,7 @@
 import { createFileRoute, redirect, Outlet } from "@tanstack/react-router";
 import { queries } from "@/api";
 import { useTokenStore } from "@/stores/useTokenStore";
+import { useFCM } from "@/hooks/useFCM";
 
 export const Route = createFileRoute("/_auth")({
   beforeLoad: async ({ context: { queryClient } }) => {
@@ -30,5 +31,6 @@ export const Route = createFileRoute("/_auth")({
 });
 
 function RouteComponent() {
+  useFCM({ withToastListener: true });
   return <Outlet />;
 }

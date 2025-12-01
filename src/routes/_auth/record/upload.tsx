@@ -1,12 +1,16 @@
 import { useUpload } from "@/hooks/useUpload";
 import { createFileRoute, Navigate, useNavigate } from "@tanstack/react-router";
+import { useMutation } from "@tanstack/react-query";
 import { useRecordContext } from "./-contexts/RecordContext";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Card } from "@/components/ui/card";
 import { FairyCharacter } from "@/components/FairyCharacter";
 import { ProgressBar } from "./-components/ProgressBar";
 import { useToast } from "@/hooks/useToast";
 import { Button } from "@/components/ui/button";
+import { useModalStore } from "@/stores/useModalStore";
+import { useFCM } from "@/hooks/useFCM";
+import { mutations } from "@/api";
 
 export const Route = createFileRoute("/_auth/record/upload")({
   component: RouteComponent,
@@ -17,6 +21,11 @@ function RouteComponent() {
   const { showToast } = useToast();
   const { uploadAsync, progress, isSuccess, isError, error } = useUpload();
   const { thumbnail, recordedBlob, timestamps } = useRecordContext();
+
+  const { confirm } = useModalStore();
+  const { fcmToken, requestPermission } = useFCM();
+  const { mutate: registerToken } = useMutation(mutations.fcm.registerToken);
+  const [isModalPending, setIsModalPending] = useState(false);
 
   // Upload 시작
   useEffect(() => {
@@ -29,14 +38,14 @@ function RouteComponent() {
 
   // 성공 트리거
   useEffect(() => {
-    if (isSuccess) {
+    if (isSuccess && !isModalPending) {
       showToast({
         description: "오늘의 일기 업로드가 완료되었습니다!",
         type: "success",
       });
       navigate({ to: "/my", replace: true });
     }
-  }, [isSuccess, navigate, showToast]);
+  }, [isModalPending, isSuccess, navigate, showToast]);
 
   // 에러 트리거
   useEffect(() => {
@@ -49,6 +58,34 @@ function RouteComponent() {
     }
   }, [isError, error, showToast]);
 
+  // 알림 모달
+  useEffect(() => {
+    const checkPermission = async () => {
+      if (
+        typeof window !== "undefined" &&
+        Notification.permission === "default"
+      ) {
+        setIsModalPending(true);
+        const allow = await confirm({
+          title: "알림 설정",
+          description:
+            "영상을 최적으로 시청할 수 있게되면 알림을 보내드릴까요?",
+        });
+        if (allow) {
+          await requestPermission();
+        }
+        setIsModalPending(false);
+      }
+    };
+    checkPermission();
+  }, [confirm, requestPermission]);
+
+  // FCM 토큰 등록
+  useEffect(() => {
+    if (fcmToken) registerToken({ fcmToken });
+  }, [fcmToken, registerToken]);
+
+  // 재시도 핸들러
   const handleRetry = () => {
     uploadAsync({
       video: recordedBlob!,
