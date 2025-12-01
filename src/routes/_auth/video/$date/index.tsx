@@ -1,12 +1,9 @@
 import { useState } from "react";
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { useMutation, useSuspenseQuery } from "@tanstack/react-query";
+import { createFileRoute } from "@tanstack/react-router";
+import { useSuspenseQuery } from "@tanstack/react-query";
 
-import { Button } from "@/components/ui/button";
 import { Header } from "@/components/ui/header";
-import { mutations, queries } from "@/api";
-import { useTokenStore } from "@/stores/useTokenStore";
-import { useToast } from "@/hooks/useToast";
+import { queries } from "@/api";
 import { Card } from "@/components/ui/card";
 import { ActionRow } from "@/components/ActionRow";
 import { VideoPlayer } from "@/components/VideoPlayer";
@@ -15,6 +12,7 @@ import { EncodingStatus } from "./-components/EncodingStatus";
 import type { SeekCommand } from "@/types/recording";
 import { formatDuration } from "@/lib/utils";
 import { NumberBadge } from "@/components/NumberBadge";
+import { LogoutButton } from "@/components/LogoutButton";
 
 export const Route = createFileRoute("/_auth/video/$date/")({
   loader: ({ context: { queryClient }, params: { date } }) => {
@@ -26,21 +24,8 @@ export const Route = createFileRoute("/_auth/video/$date/")({
 
 function RouteComponent() {
   const { date } = Route.useParams();
-  const navigate = useNavigate();
-  const { deauthorize } = useTokenStore();
-  const { showToast } = useToast();
-
   const { data } = useSuspenseQuery(queries.videos.detail(date));
   const [seekCommand, setSeekCommand] = useState<SeekCommand | null>(null);
-
-  const { mutate: logout } = useMutation({
-    ...mutations.auth.logout,
-    onSuccess: () => {
-      deauthorize();
-      showToast({ type: "success", description: "로그아웃되었습니다." });
-      navigate({ to: "/welcome" });
-    },
-  });
 
   const handleTimestampClick = (index: number) => {
     setSeekCommand({
@@ -54,9 +39,7 @@ function RouteComponent() {
   return (
     <div className="bg-background-primary h-full w-full">
       <Header>
-        <Button variant="secondary" onClick={() => logout()}>
-          로그아웃
-        </Button>
+        <LogoutButton />
       </Header>
       <main className="flex flex-col items-start gap-6 p-4 lg:flex-row lg:gap-10 lg:p-10">
         <Card
