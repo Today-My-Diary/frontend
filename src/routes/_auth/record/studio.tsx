@@ -6,6 +6,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { CameraPreview } from "./-components/CameraPreview";
 import { RecordingTimer } from "./-components/RecordingTimer";
 import { QuestionOverlay } from "./-components/QuestionOverlay";
+import { CanvasOverlay } from "./-components/CanvasOverlay";
 import type { Timestamp } from "@/types/recording";
 import { useToast } from "@/hooks/useToast";
 import { getKSTDate } from "@/lib/utils";
@@ -43,6 +44,10 @@ function RouteComponent() {
   const [currentIndex, setCurrentIndex] = useState<number>(0);
   const timestampsRef = useRef<Timestamp[]>([]);
   const videoRef = useRef<HTMLVideoElement | null>(null);
+
+  const isCanvasMode =
+    typeof window !== "undefined" &&
+    sessionStorage.getItem("benchmark_render_mode") === "canvas";
 
   useEffect(() => {
     resetRecording();
@@ -86,7 +91,6 @@ function RouteComponent() {
     }
   }, [recordingStartTime, currentIndex, finishRecording, data.questions]);
 
-  // 방향키 오른쪽으로 다음 질문 이동
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "ArrowRight") handleNext();
@@ -110,12 +114,21 @@ function RouteComponent() {
         />
       )}
 
-      <QuestionOverlay
-        question={data.questions[currentIndex]}
-        index={currentIndex}
-        totalCount={data.questions.length}
-        onNext={handleNext}
-      />
+      {isCanvasMode ? (
+        <CanvasOverlay
+          question={data.questions[currentIndex]}
+          index={currentIndex}
+          totalCount={data.questions.length}
+          onNext={handleNext}
+        />
+      ) : (
+        <QuestionOverlay
+          question={data.questions[currentIndex]}
+          index={currentIndex}
+          totalCount={data.questions.length}
+          onNext={handleNext}
+        />
+      )}
     </div>
   );
 }

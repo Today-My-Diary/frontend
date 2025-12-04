@@ -27,41 +27,9 @@ const firebaseConfig = {
   measurementId: "${process.env.VITE_FIREBASE_MEASUREMENT_ID}",
 };
 
-firebase.initializeApp(firebaseConfig);
-
 if (firebaseConfig.apiKey && firebaseConfig.authDomain) {
   firebase.initializeApp(firebaseConfig);
   const messaging = firebase.messaging();
-
-  // 알림 클릭시
-  self.addEventListener("notificationclick", function (event) {
-    event.notification.close();
-    const urlToOpen = "/my"; // 추후 Payload에 따라 동적으로 변경 가능
-
-    event.waitUntil(
-      clients
-        .matchAll({
-          type: "window",
-          includeUncontrolled: true,
-        })
-        .then(function (clientList) {
-          for (let i = 0; i < clientList.length; i++) {
-            const client = clientList[i];
-            if (
-              client.url.indexOf(self.location.origin) === 0 &&
-              "focus" in client
-            ) {
-              return client.focus().then((focusedClient) => {
-                return focusedClient.navigate(urlToOpen);
-              });
-            }
-          }
-          if (clients.openWindow) {
-            return clients.openWindow(urlToOpen);
-          }
-        }),
-    );
-  });
 } else {
   console.error("Firebase configuration is missing in the service worker.");
 }

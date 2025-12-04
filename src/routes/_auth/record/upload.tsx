@@ -1,4 +1,4 @@
-import { useUpload } from "@/hooks/useUpload";
+import { useUpload, type UploadMode } from "@/hooks/useUpload"; // [Import Type]
 import { createFileRoute, Navigate, useNavigate } from "@tanstack/react-router";
 import { useMutation } from "@tanstack/react-query";
 import { useRecordContext } from "./-contexts/RecordContext";
@@ -16,6 +16,12 @@ export const Route = createFileRoute("/_auth/record/upload")({
   component: RouteComponent,
 });
 
+const getBenchmarkMode = (): UploadMode => {
+  if (typeof window === "undefined") return "resumable";
+  const mode = sessionStorage.getItem("benchmark_upload_mode");
+  return mode === "batch" ? "batch" : "resumable";
+};
+
 function RouteComponent() {
   const navigate = useNavigate();
   const { showToast } = useToast();
@@ -29,10 +35,13 @@ function RouteComponent() {
 
   // Upload 시작
   useEffect(() => {
+    const mode = getBenchmarkMode();
+
     uploadAsync({
       video: recordedBlob!,
       thumbnail: thumbnail!,
       timestamps,
+      mode,
     });
   }, [recordedBlob, thumbnail, timestamps, uploadAsync]);
 
@@ -87,10 +96,12 @@ function RouteComponent() {
 
   // 재시도 핸들러
   const handleRetry = () => {
+    const mode = getBenchmarkMode();
     uploadAsync({
       video: recordedBlob!,
       thumbnail: thumbnail!,
       timestamps,
+      mode,
     });
   };
 

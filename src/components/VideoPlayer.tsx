@@ -127,32 +127,36 @@ export function VideoPlayer({
       hlsRef.current = null;
     }
 
-    if (isHls && video.canPlayType("application/vnd.apple.mpegurl")) {
-      video.src = videoUrl;
-      console.log("VideoPlayer: Native HLS Mode");
-    } else if (isHls && Hls.isSupported()) {
-      const hls = new Hls();
-      hlsRef.current = hls;
+    try {
+      if (isHls && Hls.isSupported()) {
+        const hls = new Hls({ startFragPrefetch: true, enableWorker: true });
+        hlsRef.current = hls;
 
-      hls.loadSource(videoUrl);
-      hls.attachMedia(video);
+        hls.loadSource(videoUrl);
+        hls.attachMedia(video);
 
-      hls.on(Hls.Events.MANIFEST_PARSED, (_, data) => {
-        const levels = data.levels
-          .map((l, i) => ({
-            height: l.height,
-            levelIndex: i,
-            label: `${l.height}p`,
-          }))
-          .sort((a, b) => b.height - a.height);
+        hls.on(Hls.Events.MANIFEST_PARSED, (_, data) => {
+          const levels = data.levels
+            .map((l, i) => ({
+              height: l.height,
+              levelIndex: i,
+              label: `${l.height}p`,
+            }))
+            .sort((a, b) => b.height - a.height);
 
-        setQualityState({
-          levels: [{ height: 0, levelIndex: -1, label: "Auto" }, ...levels],
-          currentIndex: -1,
+          setQualityState({
+            levels: [{ height: 0, levelIndex: -1, label: "Auto" }, ...levels],
+            currentIndex: -1,
+          });
+          console.log("VideoPlayer: HLS Ready");
         });
-        console.log("VideoPlayer: HLS Ready");
-      });
-    } else {
+      } else if (isHls && video.canPlayType("application/vnd.apple.mpegurl")) {
+        video.src = videoUrl;
+        console.log("VideoPlayer: Native HLS Mode");
+      } else {
+        video.src = videoUrl;
+      }
+    } catch {
       video.src = videoUrl;
     }
 
