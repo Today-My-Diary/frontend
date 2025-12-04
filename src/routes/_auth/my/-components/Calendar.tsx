@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useSuspenseQuery, useQueryClient } from "@tanstack/react-query";
 import { queries } from "@/api";
-import { cn } from "@/lib/utils";
+import { cn, getKSTDate, parseDate } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Loading } from "@/components/Loading";
 import { FallbackBoundary } from "@/components/FallbackBoundary";
@@ -58,9 +58,7 @@ function CalendarGrid({ date, onClick }: CalendarGridProps) {
               <button
                 type="button"
                 className="border-primary-semilight bg-primary-light relative flex h-full w-full overflow-hidden rounded-lg border shadow-sm transition-transform duration-300 group-hover:z-30 group-hover:scale-125 group-hover:rotate-3"
-                onClick={() =>
-                  onClick(video.uploadDate.toISOString().split("T")[0])
-                }
+                onClick={() => onClick(parseDate(video.uploadDate))}
               >
                 <img
                   src={video.thumbnailS3Url}
@@ -90,10 +88,10 @@ interface CalendarProps {
 }
 
 export function Calendar({ onClick }: CalendarProps) {
-  const [date, setDate] = useState<Date>(new Date());
+  const [date, setDate] = useState<Date>(getKSTDate());
   const queryClient = useQueryClient();
 
-  const today = new Date();
+  const today = getKSTDate();
   const isCurrentMonth =
     date.getFullYear() === today.getFullYear() &&
     date.getMonth() === today.getMonth();
@@ -142,7 +140,7 @@ export function Calendar({ onClick }: CalendarProps) {
             variant="white"
             size="sm"
             className="border-primary-semilight text-secondary border"
-            onClick={() => setDate(new Date())}
+            onClick={() => setDate(getKSTDate())}
           >
             오늘
           </Button>

@@ -1,6 +1,7 @@
 import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
 import type { Part } from "@/types/recording";
+import { getKSTDate } from "@/lib/utils";
 
 export interface UploadSession {
   uploadId: string;
@@ -50,7 +51,7 @@ export const useUploadStore = create<UploadStore>()(
               [fileKey]: {
                 ...currentSession,
                 completedParts: [...currentSession.completedParts, part],
-                lastUpdated: Date.now(),
+                lastUpdated: getKSTDate().getTime(),
               },
             },
           };
@@ -63,7 +64,7 @@ export const useUploadStore = create<UploadStore>()(
         }),
       clearExpiredSessions: (expirationMs) =>
         set((state) => {
-          const now = Date.now();
+          const now = getKSTDate().getTime();
           const newSessions = { ...state.sessions };
           let hasChanges = false;
           Object.keys(newSessions).forEach((key) => {

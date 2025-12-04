@@ -8,9 +8,10 @@ import { RecordingTimer } from "./-components/RecordingTimer";
 import { QuestionOverlay } from "./-components/QuestionOverlay";
 import type { Timestamp } from "@/types/recording";
 import { useToast } from "@/hooks/useToast";
+import { getKSTDate } from "@/lib/utils";
 
 const questionQueryOptions = () => {
-  const day = new Date().getDate().toString().padStart(2, "0");
+  const day = getKSTDate().getDate().toString().padStart(2, "0");
   return {
     ...queries.questions.daily(day),
     staleTime: 1000 * 60 * 60 * 24,
@@ -72,7 +73,7 @@ function RouteComponent() {
 
     if (currentIndex < data.questions.length - 1) {
       const nextIndex = currentIndex + 1;
-      const currentTime = Date.now() - recordingStartTime;
+      const currentTime = getKSTDate().getTime() - recordingStartTime;
 
       timestampsRef.current.push({
         time: Math.floor(currentTime / 1000),

@@ -7,10 +7,11 @@ import { Header } from "@/components/ui/header";
 import { Loading } from "@/components/Loading";
 import { queries } from "@/api";
 import { LogoutButton } from "@/components/LogoutButton";
+import { getKSTDate, parseDate } from "@/lib/utils";
 
 export const Route = createFileRoute("/_auth/my/")({
   loader: async ({ context: { queryClient } }) => {
-    const now = new Date();
+    const now = getKSTDate();
     await queryClient.ensureQueryData(queries.videos.today);
     queryClient.prefetchQuery(
       queries.videos.calendar(now.getFullYear(), now.getMonth() + 1),
@@ -26,7 +27,7 @@ function RouteComponent() {
 
   const films = data.pastVideos.map((video) => ({
     id: video.videoId,
-    date: video.uploadDate.toLocaleDateString("ko-KR"),
+    date: parseDate(video.uploadDate),
     title: video.timestamps[0]?.label || "소중한 이야기",
     thumbnailUrl: video.thumbnailS3Url,
   }));

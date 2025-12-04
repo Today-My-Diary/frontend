@@ -1,4 +1,5 @@
 import { RECORDING_CONFIG } from "@/config/recording";
+import { getKSTDate } from "@/lib/utils";
 import { useEffect, useState } from "react";
 
 interface RecordingTimerProps {
@@ -15,7 +16,7 @@ export function RecordingTimer({
 
   useEffect(() => {
     const interval = setInterval(() => {
-      const now = Date.now();
+      const now = getKSTDate().getTime();
       const diff = Math.floor((now - startTime) / 1000);
 
       if (diff >= MAX_TIME) {

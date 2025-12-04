@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import fixWebmDuration from "fix-webm-duration";
 import { RECORDING_CONFIG } from "@/config/recording";
+import { getKSTDate } from "@/lib/utils";
 
 interface UseMediaRecorderReturn {
   isRecording: boolean;
@@ -41,7 +42,7 @@ export function useMediaRecorder(
     const mediaRecorder = new MediaRecorder(stream, options);
     chunksRef.current = [];
 
-    const now = Date.now();
+    const now = getKSTDate().getTime();
     startTimeRef.current = now;
 
     mediaRecorder.ondataavailable = (e) => {
@@ -54,7 +55,7 @@ export function useMediaRecorder(
       });
       let finalBlob = blob;
 
-      const recordedDuration = Date.now() - startTimeRef.current;
+      const recordedDuration = getKSTDate().getTime() - startTimeRef.current;
       if (mimeType?.startsWith("video/webm") || !mimeType) {
         finalBlob = await fixWebmDuration(blob, recordedDuration);
       }

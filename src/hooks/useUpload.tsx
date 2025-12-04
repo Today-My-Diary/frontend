@@ -7,6 +7,7 @@ import { useUploadStore } from "@/stores/useUploadStore";
 import type { Timestamp } from "@/types/recording";
 import { useMutation } from "@tanstack/react-query";
 import { env } from "@/config/env";
+import { getKSTDate, getKSTDateWithoutTime } from "@/lib/utils";
 
 type Part = z.infer<typeof CompleteVideoUploadRequestSchema>["parts"][number];
 const SESSION_EXPIRATION_MS = 24 * 60 * 60 * 1000; // 24시간 뒤 파츠 정보 만료
@@ -29,7 +30,7 @@ const {
 } = mutations.upload;
 
 const getFileKey = (blob: Blob) => {
-  const date = new Date().toISOString().split("T")[0];
+  const date = getKSTDateWithoutTime();
   return `${date}_${blob.size}`;
 };
 
@@ -48,7 +49,7 @@ export function useUpload() {
       let state = useUploadStore.getState().sessions[fileKey];
 
       if (!state) {
-        const uploadDate = new Date().toISOString();
+        const uploadDate = getKSTDateWithoutTime();
         const { uploadId } = await initiateMultipart.mutationFn({ uploadDate });
 
         state = {
@@ -56,7 +57,7 @@ export function useUpload() {
           uploadDate,
           partCount: Math.ceil(video.size / partSize),
           completedParts: [],
-          lastUpdated: Date.now(),
+          lastUpdated: getKSTDate().getTime(),
         };
         saveSession(fileKey, state);
       }

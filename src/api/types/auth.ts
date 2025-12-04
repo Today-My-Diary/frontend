@@ -5,5 +5,5 @@ export const GetTokenResponseSchema = z.object({
 });
 
 export const PostLogoutRequest = z.object({
-  fcmToken: z.string().optional,
+  fcmToken: z.string().optional(),
 });
