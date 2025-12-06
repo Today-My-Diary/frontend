@@ -1,0 +1,50 @@
+stages:
+  - build
+  - deploy
+
+variables:
+  DEPLOY_PATH: "/var/www/harufilm-fe/dist"
+
+build:
+  stage: build
+  image: node:24-alpine
+  cache:
+    key:
+      files:
+        - pnpm-lock.yaml
+    paths:
+      - node_modules/
+  script:
+    - corepack enable
+    - corepack prepare pnpm@latest --activate
+
+    - echo "Start Building..."
+    - cp $DOTENV_FILE .env
+    - pnpm install --frozen-lockfile
+    - pnpm build
+    - echo "Build Complete!"
+  artifacts:
+    paths:
+      - dist/
+    expire_in: 1 hour
+
+deploy-to-ec2:
+  stage: deploy
+  image: alpine:latest
+  before_script:
+    - apk add --no-cache openssh-client rsync
+
+    - eval $(ssh-agent -s)
+    - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
+    - mkdir -p ~/.ssh
+    - chmod 700 ~/.ssh
+
+    - echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config
+
+  script:
+    - echo "Deploying to Server..."
+    - rsync -avz --delete dist/ $SSH_USER@$SERVER_IP:$DEPLOY_PATH/
+    - echo "Deployment Complete!"
+
+  rules:
+    - if: $CI_COMMIT_BRANCH == "main"

@@ -30,7 +30,7 @@ export function LogoutButton() {
       description: "정말 로그아웃하시겠습니까?",
     });
     if (isConfirmed) {
-      logout({ fcmToken });
+      logout({ fcmToken: fcmToken ?? undefined });
     }
   };
 
