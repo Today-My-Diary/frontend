@@ -18,7 +18,6 @@ const calendarQueryOptions = (date: Date) => {
   };
 };
 
-// Maybe need memoization?
 function CalendarGrid({ date, onClick }: CalendarGridProps) {
   const { data: videos } = useSuspenseQuery(calendarQueryOptions(date));
 

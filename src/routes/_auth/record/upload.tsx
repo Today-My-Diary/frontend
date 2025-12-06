@@ -30,7 +30,9 @@ function RouteComponent() {
 
   const { confirm } = useModalStore();
   const { fcmToken, requestPermission } = useFCM();
-  const { mutate: registerToken } = useMutation(mutations.fcm.registerToken);
+  const { mutate: registerToken, isPending: isRegistering } = useMutation(
+    mutations.fcm.registerToken,
+  );
   const [isModalPending, setIsModalPending] = useState(false);
 
   // Upload 시작
@@ -47,14 +49,14 @@ function RouteComponent() {
 
   // 성공 트리거
   useEffect(() => {
-    if (isSuccess && !isModalPending) {
+    if (isSuccess && !isModalPending && !isRegistering) {
       showToast({
         description: "오늘의 일기 업로드가 완료되었습니다!",
         type: "success",
       });
       navigate({ to: "/my", replace: true });
     }
-  }, [isModalPending, isSuccess, navigate, showToast]);
+  }, [isModalPending, isSuccess, isRegistering, navigate, showToast]);
 
   // 에러 트리거
   useEffect(() => {
@@ -72,6 +74,7 @@ function RouteComponent() {
     const checkPermission = async () => {
       if (
         typeof window !== "undefined" &&
+        "Notification" in window &&
         Notification.permission === "default"
       ) {
         setIsModalPending(true);

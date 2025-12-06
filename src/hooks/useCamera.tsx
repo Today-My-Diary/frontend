@@ -69,7 +69,10 @@ export function useCamera(): UseCameraReturn {
 
   const stopCamera = useCallback(() => {
     if (streamRef.current) {
-      streamRef.current.getTracks().forEach((track) => track.stop());
+      streamRef.current.getTracks().forEach((track) => {
+        track.stop();
+        track.enabled = false;
+      });
       streamRef.current = null;
       setStream(null);
       setPermissionStatus({ video: false, audio: false });

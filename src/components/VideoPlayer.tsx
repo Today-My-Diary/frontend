@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from "react";
-import Hls from "hls.js";
 import type { Timestamp } from "@/types/recording";
 import zoom_in_icon from "@/assets/icons/zoom_in_icon.svg";
 import zoom_out_icon from "@/assets/icons/zoom_out_icon.svg";
+import { useHlsPlayer, type QualityLevel } from "@/hooks/useHlsPlayer";
 import { cn } from "@/lib/utils";
 import type { SeekCommand } from "../types/recording";
 import { Button } from "./ui/button";
@@ -12,17 +12,6 @@ interface VideoPlayerProps {
   timestamps: Timestamp[];
   seekCommand?: SeekCommand | null;
   className?: string;
-}
-
-interface QualityLevel {
-  height: number;
-  levelIndex: number; // -1 is for auto
-  label: string;
-}
-
-interface QualityState {
-  levels: QualityLevel[];
-  currentIndex: number;
 }
 
 function QualitySelector({
@@ -95,15 +84,11 @@ export function VideoPlayer({
   className,
 }: VideoPlayerProps) {
   const containerRef = useRef<HTMLDivElement>(null);
-  const videoRef = useRef<HTMLVideoElement>(null);
-  const hlsRef = useRef<Hls | null>(null);
+  const { videoRef, qualityLevels, currentLevel, changeQuality, player } =
+    useHlsPlayer(videoUrl);
 
   const [isFullscreen, setIsFullscreen] = useState<boolean>(false);
   const [currentSubtitle, setCurrentSubtitle] = useState<string>("");
-  const [qualityState, setQualityState] = useState<QualityState>({
-    levels: [],
-    currentIndex: -1,
-  });
 
   // 전체화면 상태 감지
   useEffect(() => {
@@ -115,75 +100,20 @@ export function VideoPlayer({
       document.removeEventListener("fullscreenchange", handleFullscreenChange);
   }, []);
 
-  // 비디오 로드 및 HLS 설정
-  useEffect(() => {
-    const video = videoRef.current;
-    if (!video || !videoUrl) return;
-
-    const isHls = videoUrl.includes(".m3u8");
-
-    if (hlsRef.current) {
-      hlsRef.current.destroy();
-      hlsRef.current = null;
-    }
-
-    try {
-      if (isHls && Hls.isSupported()) {
-        const hls = new Hls({ startFragPrefetch: true, enableWorker: true });
-        hlsRef.current = hls;
-
-        hls.loadSource(videoUrl);
-        hls.attachMedia(video);
-
-        hls.on(Hls.Events.MANIFEST_PARSED, (_, data) => {
-          const levels = data.levels
-            .map((l, i) => ({
-              height: l.height,
-              levelIndex: i,
-              label: `${l.height}p`,
-            }))
-            .sort((a, b) => b.height - a.height);
-
-          setQualityState({
-            levels: [{ height: 0, levelIndex: -1, label: "Auto" }, ...levels],
-            currentIndex: -1,
-          });
-          console.log("VideoPlayer: HLS Ready");
-        });
-      } else if (isHls && video.canPlayType("application/vnd.apple.mpegurl")) {
-        video.src = videoUrl;
-        console.log("VideoPlayer: Native HLS Mode");
-      } else {
-        video.src = videoUrl;
-      }
-    } catch {
-      video.src = videoUrl;
-    }
-
-    return () => {
-      if (hlsRef.current) {
-        hlsRef.current.detachMedia();
-        hlsRef.current.destroy();
-        hlsRef.current = null;
-      }
-    };
-  }, [videoUrl]);
-
   // 타임스탬프 이동 처리
   useEffect(() => {
-    if (!videoRef.current || !seekCommand) return;
+    if (!seekCommand) return;
 
     const index = seekCommand.timestampIndex;
     if (index >= 0 && index < timestamps.length) {
-      videoRef.current.currentTime = timestamps[index]?.time ?? 0;
-      videoRef.current.play();
+      player.seekTo(timestamps[index]?.time ?? 0);
+      player.play();
     }
-  }, [seekCommand, timestamps]);
+  }, [seekCommand, timestamps, player]);
 
   const reversedTimestamps = [...timestamps].reverse();
   const handleTimeUpdate = () => {
-    if (!videoRef.current) return;
-    const currentTime = videoRef.current.currentTime;
+    const currentTime = player.getCurrentTime();
     const activeTimestamp = reversedTimestamps.find(
       (t) => t.time <= currentTime,
     );
@@ -197,11 +127,7 @@ export function VideoPlayer({
     }
   };
 
-  const focusVideo = () => {
-    if (videoRef.current) {
-      videoRef.current.focus();
-    }
-  };
+  const focusVideo = () => player.focus();
 
   const toggleFullScreen = () => {
     if (!containerRef.current) return;
@@ -216,10 +142,7 @@ export function VideoPlayer({
   };
 
   const handleQualityChange = (levelIndex: number) => {
-    if (hlsRef.current) {
-      hlsRef.current.currentLevel = levelIndex;
-      setQualityState((prev) => ({ ...prev, currentIndex: levelIndex }));
-    }
+    changeQuality(levelIndex);
     focusVideo();
   };
 
@@ -242,8 +165,8 @@ export function VideoPlayer({
       {/* 우측 상단 컨트롤 버튼 그룹 */}
       <div className="absolute top-4 right-4 z-10 flex items-center gap-2 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
         <QualitySelector
-          levels={qualityState.levels}
-          currentIndex={qualityState.currentIndex}
+          levels={qualityLevels}
+          currentIndex={currentLevel}
           onSelect={handleQualityChange}
         />
 

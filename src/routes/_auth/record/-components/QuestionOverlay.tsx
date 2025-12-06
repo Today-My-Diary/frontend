@@ -7,7 +7,6 @@ interface QuestionOverlayProps {
   onNext: () => void;
 }
 
-// Maybe need memoization?
 export function QuestionOverlay({
   question,
   index,

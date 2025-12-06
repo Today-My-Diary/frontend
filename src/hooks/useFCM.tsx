@@ -30,7 +30,7 @@ export const useFCM = ({ withToastListener = false }: UseFCMOptions = {}) => {
   const isInitialized = useRef(false);
 
   const requestPermission = useCallback(async () => {
-    if (typeof window === "undefined") return;
+    if (typeof window === "undefined" || !("Notification" in window)) return;
     try {
       const permission = await Notification.requestPermission();
       if (permission === "granted") {
@@ -50,7 +50,7 @@ export const useFCM = ({ withToastListener = false }: UseFCMOptions = {}) => {
 
   // withToastListener인 경우 (최상단 컴포넌트에서만 사용)
   useEffect(() => {
-    if (!withToastListener) return;
+    if (!withToastListener || !("Notification" in window)) return;
     if (
       Notification.permission === "granted" &&
       !isInitialized.current &&
@@ -66,7 +66,7 @@ export const useFCM = ({ withToastListener = false }: UseFCMOptions = {}) => {
   }, [withToastListener, fcmToken, setFcmToken]);
 
   useEffect(() => {
-    if (!withToastListener || !messaging) return;
+    if (!withToastListener || !messaging || !("Notification" in window)) return;
 
     const unsubscribe = onMessage(messaging, (payload) => {
       if (!payload.notification?.title) return;
