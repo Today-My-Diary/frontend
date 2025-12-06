@@ -26,9 +26,23 @@ function RouteComponent() {
     return recordedBlob ? URL.createObjectURL(recordedBlob) : "";
   }, [recordedBlob]);
 
+  const isSafari = () => {
+    if (typeof window === "undefined") return false;
+    const ua = navigator.userAgent.toLowerCase();
+    return (
+      ua.includes("safari") && !ua.includes("chrome") && !ua.includes("android")
+    );
+  };
+
   useEffect(() => {
     return () => URL.revokeObjectURL(blobURL);
   }, [blobURL]);
+
+  useEffect(() => {
+    if (isSafari()) {
+      navigate({ to: "/record/thumbnail", replace: true });
+    }
+  }, [navigate]);
 
   const handleTimestampClick = (index: number) => {
     setSeekCommand({
