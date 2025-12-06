@@ -49,7 +49,9 @@ function RouteComponent() {
         >
           <EncodingStatus encoded={data.encoded} />
           <div className="mt-5 text-center md:mt-0">
-            <h2 className="text-secondary text-lg font-semibold">{title}</h2>
+            <h2 className="text-secondary text-lg font-semibold break-keep">
+              {title}
+            </h2>
             <p className="text-secondary text-sm">{date}</p>
           </div>
           <VideoPlayer
