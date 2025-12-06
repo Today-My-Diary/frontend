@@ -104,7 +104,7 @@ function RouteComponent() {
   }
 
   return (
-    <div className="relative h-full w-full overflow-hidden bg-black">
+    <div className="relative h-screen w-full overflow-hidden bg-black">
       <CameraPreview stream={stream} ref={videoRef} />
 
       {recordingStartTime && (

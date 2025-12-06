@@ -24,7 +24,7 @@ function RouteComponent() {
   }
 
   return (
-    <div className="relative h-full w-full overflow-hidden bg-black">
+    <div className="relative h-screen w-full overflow-hidden bg-black">
       <CameraPreview stream={stream} ref={videoRef} />
       <div className="absolute top-10 right-0 left-0 flex w-full justify-center">
         <div className="flex flex-col items-center rounded-lg bg-black/60 p-8 text-center text-white shadow-lg backdrop-blur-sm">

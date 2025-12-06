@@ -37,7 +37,7 @@ function RouteComponent() {
   const title = mainQuestion ? `"${mainQuestion}" 외` : "영상 기록 보기";
 
   return (
-    <div className="bg-background-primary h-full w-full">
+    <div className="bg-background-primary min-h-screen w-full">
       <Header>
         <LogoutButton />
       </Header>

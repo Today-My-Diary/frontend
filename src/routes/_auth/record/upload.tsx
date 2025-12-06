@@ -113,7 +113,7 @@ function RouteComponent() {
   }
 
   return (
-    <div className="bg-secondary-light text-secondary flex h-full w-full flex-col items-center justify-center px-2">
+    <div className="bg-secondary-light text-secondary flex min-h-screen w-full flex-col items-center justify-center px-2">
       <Card variant="primary" className="w-full max-w-xs gap-0">
         <FairyCharacter size={80} />
         <p className="text-lg font-semibold">

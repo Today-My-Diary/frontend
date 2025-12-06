@@ -34,7 +34,7 @@ const FILMS = [
 
 function RouteComponent() {
   return (
-    <div className="bg-background-primary w-full">
+    <div className="bg-background-primary min-h-screen w-full">
       <Header>
         <Link to="/login">
           <Button variant="primary">나만의 이야기 기록하기</Button>

@@ -56,7 +56,7 @@ function RouteComponent() {
   }
 
   return (
-    <div className="bg-secondary-light flex min-h-full w-full flex-col items-center gap-10 px-4 py-10">
+    <div className="bg-secondary-light flex min-h-screen w-full flex-col items-center gap-10 px-4 py-10">
       <h1 className="text-secondary text-2xl font-bold md:text-3xl">
         오늘의 기록을 확인해보세요!
       </h1>

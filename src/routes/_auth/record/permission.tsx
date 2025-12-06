@@ -53,7 +53,7 @@ function RouteComponent() {
   };
 
   return (
-    <div className="bg-secondary-light flex h-full w-full items-center justify-center px-4">
+    <div className="bg-secondary-light flex min-h-screen w-full items-center justify-center px-4">
       <Card
         variant="primary"
         padding="lg"
