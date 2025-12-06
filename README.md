@@ -118,18 +118,20 @@ TypeScript의 정적 타입 검사로는 보장할 수 없는 런타임 환경�
 </details>
 
 <details>
-<summary><h3>5. React Compiler를 통한 성능 최적화</h3></summary>
+<summary><h3>5. UX의 연속성을 위한 인증 전략 (Silent Refresh)</h3></summary>
 
-React 19의 React Compiler를 도입해 Memoization보다는 핵심 로직에 집중하면서도 렌더링 성능을 극대화했습니다.
+본 프로젝트에서는 XSS 공격을 예방하기 위해 Access Token은 In-Memory에만 저장하고, Refresh Token은 HttpOnly Cookie로 관리합니다. 이러한 과정에서 페이지 새로고침 시(혹은 토큰 만료시) 사용자가 로그인 페이지로 리다이렉트되는 문제가 발생합니다. 이를 해결하기 위해 **Silent Refresh** 방식을 도입했습니다.
 
-그러나 [Rules of Hooks](https://react.dev/reference/rules/rules-of-hooks)를 준수하였음에도 Custom Hook - Context - Component로 이어지는 구조에서 원하는 만큼의 메모이제이션을 수행하지 못함을 확인했습니다.
+- **Interceptor 패턴**: `Ky` 라이브러리의 훅을 활용해 `401 Unauthorized` 응답을 감지
 
-따라서 **명시적으로 리렌더링 이슈가 발생하는 Custom Hook 내부에 한해 메모이제이션을 적용하고, 이 외에는 React Compiler에 맡기는 하이브리드 방식을 채택했습니다.**
+- **Seamless Retry**: 토큰 재발급 요청 후, 실패했던 원본 요청 헤더에 새 토큰을 주입하여 **Transparent Retry** 처리
+
+- **결과**: 사용자는 세션 만료를 인지하지 못하며, 로그아웃 없이 서비스를 지속적으로 이용 가능
 
 </details>
 
 <details>
-<summary><h3>6. TanStack Router 기반의 명확한 라우팅</h3></summary>
+<summary><h3>6. TanStack Router 기반의 파일 기반 라우팅</h3></summary>
 
 서비스 특성상 **로그인 전(Landing, Login)** 과 **로그인 후(Dashboard, Record)** 의 UI 레이아웃과 접근 권한이 완전히 분리되어야 했습니다. 이를 위해 TanStack Router의 **File-Based Routing**과 **Layout Route** 기능을 적극 활용했습니다.
 
@@ -140,23 +142,7 @@ React 19의 React Compiler를 도입해 Memoization보다는 핵심 로직에 �
 </details>
 
 <details>
-<summary><h3>7. 푸시 알림을 위한 환경 설정의 동적 주입</h3></summary>
-
-FCM 푸시 알림을 위한 Service Worker 파일(`firebase-messaging-sw.js`)은 빌드 시점에 환경 변수를 주입할 수 없기 때문에, 애플리케이션 초기화 시점에 동적으로 설정 값을 주입하는 방식을 채택했습니다.
-
-이를 통해 React 내부와 외부에 동일 정보가 이중으로 관리되는 문제를 해결하고, 일관된 동작을 보장합니다.
-
-</details>
-
-<details>
-<summary><h3>8. 상황에 맞는 상태 관리 전략</h3></summary>
-
-Access Token 등 전역적 접근이 필수적인 상태는 Zustand로, API 데이터 캐싱 등 서버 상태는 TanStack Query로, 녹화 프로세스 등 특정 컴포넌트 트리 내에서만 필요한 상태는 Context로 관리하는 등 상황에 맞는 상태 관리 전략을 채택했습니다.
-
-</details>
-
-<details>
-<summary><h3>9. 선언적인 비동기 상태 처리와 부분적 에러 격리</h3></summary>
+<summary><h3>7. 선언적인 비동기 상태 처리와 부분적 에러 처리</h3></summary>
 
 데이터 로딩 중(`Loading`)이거나 실패(`Error`)했을 때, 전체 페이지를 Blocking하는 대신 필요한 부분만 상태를 보여주는 것이 UX 측면에서 중요했습니다.
 

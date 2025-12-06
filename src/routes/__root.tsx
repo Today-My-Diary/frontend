@@ -27,6 +27,23 @@ export const Route = createRootRouteWithContext<RouterContext>()({
         content:
           "매일 매일을 영상 일기로 기록하고, 나만의 변화를 추적해보세요. 하루 필름과 함께라면 소중한 기억을 놓치지 않고 간직할 수 있습니다.",
       },
+      {
+        property: "og:type",
+        content: "website",
+      },
+      {
+        property: "og:title",
+        content: "하루 필름 - 나만의 영상 일기",
+      },
+      {
+        property: "og:description",
+        content:
+          "매일 매일을 영상 일기로 기록하고, 나만의 변화를 추적해보세요. 하루 필름과 함께라면 소중한 기억을 놓치지 않고 간직할 수 있습니다.",
+      },
+      {
+        property: "og:image",
+        content: "/og-image.png",
+      },
     ],
   }),
   notFoundComponent: NotFoundComponent,

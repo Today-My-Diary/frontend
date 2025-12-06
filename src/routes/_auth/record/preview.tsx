@@ -26,9 +26,23 @@ function RouteComponent() {
     return recordedBlob ? URL.createObjectURL(recordedBlob) : "";
   }, [recordedBlob]);
 
+  const isSafari = () => {
+    if (typeof window === "undefined") return false;
+    const ua = navigator.userAgent.toLowerCase();
+    return (
+      ua.includes("safari") && !ua.includes("chrome") && !ua.includes("android")
+    );
+  };
+
   useEffect(() => {
     return () => URL.revokeObjectURL(blobURL);
   }, [blobURL]);
+
+  useEffect(() => {
+    if (isSafari()) {
+      navigate({ to: "/record/thumbnail", replace: true });
+    }
+  }, [navigate]);
 
   const handleTimestampClick = (index: number) => {
     setSeekCommand({
@@ -56,7 +70,7 @@ function RouteComponent() {
   }
 
   return (
-    <div className="bg-secondary-light flex min-h-full w-full flex-col items-center gap-10 px-4 py-10">
+    <div className="bg-secondary-light flex min-h-screen w-full flex-col items-center gap-10 px-4 py-10">
       <h1 className="text-secondary text-2xl font-bold md:text-3xl">
         오늘의 기록을 확인해보세요!
       </h1>

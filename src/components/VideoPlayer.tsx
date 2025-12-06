@@ -14,6 +14,8 @@ interface VideoPlayerProps {
   className?: string;
 }
 
+type Timeout = ReturnType<typeof setTimeout>;
+
 function QualitySelector({
   levels,
   currentIndex,
@@ -55,7 +57,7 @@ function QualitySelector({
       </Button>
 
       {isOpen && (
-        <div className="absolute top-full right-0 mt-2 flex flex-col overflow-hidden rounded-lg bg-black/80 whitespace-nowrap text-white backdrop-blur-md">
+        <div className="absolute top-full right-0 mt-2 flex flex-col overflow-hidden rounded-lg bg-black/80 whitespace-nowrap text-white">
           {levels.map((q) => (
             <button
               key={q.levelIndex}
@@ -89,6 +91,9 @@ export function VideoPlayer({
 
   const [isFullscreen, setIsFullscreen] = useState<boolean>(false);
   const [currentSubtitle, setCurrentSubtitle] = useState<string>("");
+
+  const [showControls, setShowControls] = useState(false);
+  const controlsTimeoutRef = useRef<Timeout | null>(null);
 
   // 전체화면 상태 감지
   useEffect(() => {
@@ -129,6 +134,27 @@ export function VideoPlayer({
 
   const focusVideo = () => player.focus();
 
+  const handleInteraction = () => {
+    setShowControls(true);
+    if (controlsTimeoutRef.current) {
+      clearTimeout(controlsTimeoutRef.current);
+    }
+
+    controlsTimeoutRef.current = setTimeout(() => {
+      if (videoRef.current && !videoRef.current.paused) {
+        setShowControls(false);
+      }
+    }, 3000);
+  };
+
+  const toggleControls = () => {
+    setShowControls((prev) => {
+      const nextState = !prev;
+      if (nextState) handleInteraction();
+      return nextState;
+    });
+  };
+
   const toggleFullScreen = () => {
     if (!containerRef.current) return;
     if (!document.fullscreenElement) {
@@ -146,51 +172,73 @@ export function VideoPlayer({
     focusVideo();
   };
 
+  const isIOS = () => {
+    if (typeof window === "undefined") return false;
+    return /iPhone|iPad|iPod/i.test(navigator.userAgent);
+  };
+
   return (
     <div
       ref={containerRef}
       className={cn(
-        "group relative flex items-center justify-center overflow-hidden bg-black",
+        "group relative flex items-center justify-center bg-black",
         className,
       )}
+      onMouseMove={handleInteraction}
+      onClick={toggleControls}
+      onMouseLeave={() => setShowControls(false)}
     >
-      <video
-        ref={videoRef}
-        controls
-        className="aspect-video w-full object-contain [&::-webkit-media-controls-fullscreen-button]:hidden"
-        playsInline
-        onTimeUpdate={handleTimeUpdate}
-      />
+      <div className="flex h-full w-full items-center justify-center overflow-hidden rounded-[inherit]">
+        <video
+          ref={videoRef}
+          controls
+          className="aspect-video w-full object-contain [&::-webkit-media-controls-fullscreen-button]:hidden"
+          playsInline
+          onTimeUpdate={handleTimeUpdate}
+          onPlay={() => setShowControls(false)}
+          onPause={() => setShowControls(true)}
+        />
+      </div>
 
       {/* 우측 상단 컨트롤 버튼 그룹 */}
-      <div className="absolute top-4 right-4 z-10 flex items-center gap-2 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+      <div
+        className={cn(
+          "absolute top-4 right-4 z-10 flex items-center gap-2 transition-opacity duration-300",
+          showControls ? "opacity-100" : "pointer-events-none opacity-0",
+        )}
+        onClick={(e) => e.stopPropagation()}
+      >
         <QualitySelector
           levels={qualityLevels}
           currentIndex={currentLevel}
           onSelect={handleQualityChange}
         />
 
-        <Button
-          variant="glass"
-          size="icon"
-          title="전체화면"
-          onClick={toggleFullScreen}
-        >
-          {isFullscreen ? (
-            <img src={zoom_out_icon} alt="축소" />
-          ) : (
-            <img src={zoom_in_icon} alt="전체화면" />
-          )}
-        </Button>
+        {!isIOS() && (
+          <Button
+            variant="glass"
+            size="icon"
+            title="전체화면"
+            onClick={toggleFullScreen}
+          >
+            {isFullscreen ? (
+              <img src={zoom_out_icon} alt="축소" />
+            ) : (
+              <img src={zoom_in_icon} alt="전체화면" />
+            )}
+          </Button>
+        )}
       </div>
 
       {/* 자막 표시 영역 */}
       {currentSubtitle && (
-        <div className="pointer-events-none absolute right-0 bottom-12 left-0 flex w-full justify-center transition duration-300">
+        <div className="pointer-events-none absolute right-0 bottom-6 left-0 flex w-full justify-center transition duration-300 md:bottom-12">
           <div
             className={cn(
-              "w-fit rounded-lg bg-black/60 text-center text-white backdrop-blur-sm",
-              isFullscreen ? "mb-14 px-6 py-3 text-2xl" : "text-md px-3 py-2",
+              "w-fit rounded-lg bg-black/60 text-center break-keep text-white backdrop-blur-sm text-shadow-md",
+              isFullscreen
+                ? "mb-14 px-6 py-3 text-lg md:text-2xl"
+                : "px-3 py-2 text-xs md:text-base",
             )}
           >
             {currentSubtitle}

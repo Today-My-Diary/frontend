@@ -35,7 +35,7 @@ function RouteComponent() {
   const handleFilmClick = (date: string) => navigate({ to: `/video/${date}` });
 
   return (
-    <div className="bg-background-primary w-full">
+    <div className="bg-background-primary min-h-screen w-full">
       <Header>
         <LogoutButton />
       </Header>
