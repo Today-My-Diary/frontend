@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import Hls from "hls.js";
 
 export interface QualityLevel {
@@ -69,7 +69,7 @@ export function useHlsPlayer(videoUrl: string) {
     }
   };
 
-  const player = {
+  const player = useMemo(() => ({
     seekTo: (time: number) => {
       if (videoRef.current) {
         videoRef.current.currentTime = time;
@@ -87,7 +87,7 @@ export function useHlsPlayer(videoUrl: string) {
     getCurrentTime: () => {
       return videoRef.current?.currentTime ?? 0;
     },
-  };
+  }), []);
 
   return { videoRef, qualityLevels, currentLevel, changeQuality, player };
 }
