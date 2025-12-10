@@ -28,8 +28,18 @@ const firebaseConfig = {
 };
 
 if (firebaseConfig.apiKey && firebaseConfig.authDomain) {
-  firebase.initializeApp(firebaseConfig);
+  if (firebase.apps.length === 0) {
+    firebase.initializeApp(firebaseConfig);
+  }
   const messaging = firebase.messaging();
+
+  // Data Message 대응 ('이 사이트는 백그라운드에서 업데이트되었습니다.' 방어 로직)
+  messaging.setBackgroundMessageHandler((payload) 
+    => self.registration.showNotification(
+      payload.data?.title || '알림', 
+      { body: payload.data?.body || '새로운 알림이 있습니다.' }
+    )
+  );
 } else {
   console.error("Firebase configuration is missing in the service worker.");
 }
